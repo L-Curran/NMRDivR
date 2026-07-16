@@ -68,8 +68,8 @@ detect_peaks <- function(spectra.matrix,
     sample.labels = sample.names,
     window.width = window.width,
     window.split = window.split,
-    include.nearbyPeaks = include.nearbyPeaks,
-    raw_peakheight = raw_peakheight,
+    include_nearbyPeaks = TRUE,
+    raw_peakheight = FALSE,
     ...
   )
 
@@ -119,182 +119,249 @@ detect_peaks <- function(spectra.matrix,
 #' @export
 
 
-peak_assessment <- function(peaks.df,
-                            spectra.matrix = NULL,
+peak_assessment <- function(peak_signals,
+                            spectra_matrix = NULL,
                             ppm = NULL,
-                            spectra.metadata = NULL,
+                            spectra_metadata = NULL,
                             treatment = "Landuse",
-                            treatment.colours = NULL,
+                            treatment_colours = NULL,
                             region = NULL,
-                            outlier.quantile = 0.95,
-                            min.signal = 3,
+                            outlier_quantile = 0.95,
+                            min_signal = 3,
                             binwidth = NULL,
                             legend_position = "right",
-                            facet.order = NULL) {
-  # -------------------------------
-  # REQUIRED COLUMNS CHECK
-  # -------------------------------
+                            facet_order = NULL) {
+  # --- Check required columns ---
   required_cols <- c("Spectra.ID",
                      "Peak.SNR",
                      "Peak.Shift",
                      "Peak.AUC",
                      "Peak.ID")
-
-  if (!all(required_cols %in% colnames(peaks.df))) {
-    stop("Input must contain: Spectra.ID, Peak.SNR, Peak.Shift, Peak.AUC, Peak.ID")
+  if (!all(required_cols %in% colnames(peak_signals))) {
+    stop(
+      "Input dataframe must contain columns: Spectra.ID, Peak.SNR, Peak.Shift, Peak.AUC and Peak.ID"
+    )
   }
 
-  peaks.df <- stats::na.omit(peaks.df[, required_cols])
+  peak_signals <- stats::na.omit(peak_signals[, required_cols])
 
-  # -------------------------------
-  # SNR CLASSIFICATION (FASTER base R instead of dplyr)
-  # -------------------------------
-  snr <- peaks.df$Peak.SNR
-
-  peaks.df$SNR_Category <- base::ifelse(snr < min.signal,
-                                        "Poor (<min)",
-                                        base::ifelse(
-                                          snr < 25,
-                                          "Low (min–25)",
-                                          base::ifelse(snr < 50, "Moderate (25–50)", "High (>=50)")
-                                        ))
-
+  # --- Assign SNR categories ---
   cb_palette <- c(
-    "Poor (<min)"      = "#999999",
-    "Low (min–25)"     = "#D55E00",
-    "Moderate (25–50)" = "#E69F00",
-    "High (>=50)"      = "#009E73"
+    "Poor (<min)"       = "#999999",
+    "Low (min–25)"      = "#D55E00",
+    "Moderate (25–50)"  = "#E69F00",
+    "High (>=50)"       = "#009E73"
   )
 
-  peaks.df$SNR_Category <- factor(peaks.df$SNR_Category, levels = names(cb_palette))
+  peak_signals <- dplyr::mutate(
+    peak_signals,
+    SNR_Category = dplyr::case_when(
+      Peak.SNR < min_signal ~ "Poor (<min)",
+      Peak.SNR >= min_signal & Peak.SNR < 25 ~ "Low (min–25)",
+      Peak.SNR >= 25 & Peak.SNR < 50 ~ "Moderate (25–50)",
+      Peak.SNR >= 50 ~ "High (>=50)"
+    ),
+    SNR_Category = factor(SNR_Category, levels = names(cb_palette))
+  )
 
-  # -------------------------------
-  # OUTLIERS (fast vector ops)
-  # -------------------------------
-  snr_threshold <- stats::quantile(snr, outlier.quantile, na.rm = TRUE)
-  outlier_idx <- snr > snr_threshold
+  # --- Identify outliers ---
+  snr_threshold <- stats::quantile(peak_signals$Peak.SNR, outlier_quantile)
+  outlier_peaks <- dplyr::filter(peak_signals, Peak.SNR > snr_threshold)
+  peak_outliers <- dplyr::select(outlier_peaks, Peak.Shift, Spectra.ID, Peak.AUC, Peak.SNR)
 
-  peak_outliers <- peaks.df[outlier_idx, c("Peak.Shift", "Spectra.ID", "Peak.AUC", "Peak.SNR")]
-
-  # -------------------------------
-  # METADATA JOIN (base merge faster than dplyr here)
-  # -------------------------------
-  if (!is.null(spectra.metadata)) {
-    if (!all(c("Spectra.ID", treatment) %in% names(spectra.metadata))) {
-      stop("spectra.metadata must contain Spectra.ID and treatment column")
+  # --- Metadata join ---
+  if (!is.null(spectra_metadata)) {
+    if (!all(c("Spectra.ID", treatment) %in% colnames(spectra_metadata))) {
+      stop(
+        paste0(
+          "spectra_metadata dataframe must contain columns: Spectra.ID, ",
+          treatment
+        )
+      )
     }
 
-    meta_sub <- spectra.metadata[, c("Spectra.ID", treatment)]
+    peak_outliers <- dplyr::left_join(
+      peak_outliers,
+      dplyr::select(spectra_metadata, Spectra.ID, dplyr::all_of(treatment)),
+      by = "Spectra.ID",
+      relationship = "many-to-many"
+    )
 
-    peak_outliers <- merge(peak_outliers, meta_sub, by = "Spectra.ID", all.x = TRUE)
-
-    peaks.df <- merge(peaks.df, meta_sub, by = "Spectra.ID", all.x = TRUE)
-
+    peak_signals <- dplyr::left_join(
+      peak_signals,
+      dplyr::select(spectra_metadata, Spectra.ID, dplyr::all_of(treatment)),
+      by = "Spectra.ID",
+      relationship = "many-to-many"
+    )
   } else {
     peak_outliers[[treatment]] <- "Unknown"
-    peaks.df[[treatment]] <- "Unknown"
+    peak_signals[[treatment]] <- "Unknown"
   }
 
-  # -------------------------------
-  # FILTERED PEAKS
-  # -------------------------------
-  filtered_peaks <- peaks.df[peaks.df$Peak.SNR >= min.signal, ]
+  filtered_peaks <- dplyr::filter(peak_signals, Peak.SNR >= min_signal)
 
-  # -------------------------------
-  # FACET ORDER (fast factor assign)
-  # -------------------------------
-  if (!is.null(facet.order)) {
-    filtered_peaks[[treatment]] <- factor(filtered_peaks[[treatment]], levels = facet.order)
+  # --- Control facet order ---
+  if (!is.null(facet_order)) {
+    filtered_peaks[[treatment]] <- factor(filtered_peaks[[treatment]], levels = facet_order)
   } else {
     filtered_peaks[[treatment]] <- factor(filtered_peaks[[treatment]])
   }
 
-  # -------------------------------
-  # HISTOGRAM (FAST BINNING WITHOUT dplyr)
-  # -------------------------------
-  snr_vals <- peaks.df$Peak.SNR
-
+  # --- Histogram of SNR ---
   if (is.null(binwidth)) {
-    binwidth <- diff(range(snr_vals, na.rm = TRUE)) / 50
+    binwidth <- (
+      max(peak_signals$Peak.SNR, na.rm = TRUE) - min(peak_signals$Peak.SNR, na.rm = TRUE)
+    ) / 50
   }
 
-  breaks <- seq(floor(min(snr_vals, na.rm = TRUE)), ceiling(max(snr_vals, na.rm = TRUE)) + binwidth, by = binwidth)
+  hist_data <- dplyr::mutate(peak_signals,
+                             bin = cut(
+                               Peak.SNR,
+                               breaks = seq(floor(min(Peak.SNR, na.rm = TRUE)), ceiling(max(Peak.SNR, na.rm = TRUE)) + binwidth, by = binwidth),
+                               include.lowest = TRUE,
+                               right = FALSE
+                             )) %>%
+    dplyr::group_by(bin, SNR_Category) %>%
+    dplyr::summarise(count = dplyr::n(), .groups = "drop") %>%
+    dplyr::mutate(
+      bin_center = as.numeric(sub("\\[(.+),.*", "\\1", bin)) + binwidth / 2,
+      density = count / sum(count) / binwidth
+    )
 
-  bins <- base::cut(
-    snr_vals,
-    breaks = breaks,
-    include.lowest = TRUE,
-    right = FALSE
-  )
-
-  bin_levels <- levels(bins)
-  bin_mid <- as.numeric(sub("\\[(.+),.*", "\\1", bin_levels)) + binwidth / 2
-
-  hist_counts <- base::table(bins, peaks.df$SNR_Category)
-
-  hist_data <- data.frame(
-    bin = rep(bin_levels, times = length(cb_palette)),
-    SNR_Category = rep(names(cb_palette), each = length(bin_levels)),
-    count = as.vector(hist_counts)
-  )
-
-  hist_data$bin_center <- bin_mid[match(hist_data$bin, bin_levels)]
-  hist_data$density <- hist_data$count / sum(hist_data$count) / binwidth
-
-  # -------------------------------
-  # SNR PLOT (ggplot2 namespaced)
-  # -------------------------------
-  hist_plot <- ggplot2::ggplot(hist_data) +
+  hist_plot <- ggplot2::ggplot() +
     ggplot2::geom_col(
+      data = hist_data,
       ggplot2::aes(x = bin_center, y = density, fill = SNR_Category),
-      colour = "black",
+      color = "black",
       alpha = 0.7
     ) +
     ggplot2::geom_density(
-      data = data.frame(Peak.SNR = snr_vals),
+      data = peak_signals,
       ggplot2::aes(x = Peak.SNR),
-      colour = "black",
-      linewidth = 1
+      color = "black",
+      size = 1.2
     ) +
     ggplot2::scale_fill_manual(values = cb_palette, drop = FALSE) +
     ggplot2::geom_vline(
-      xintercept = min.signal,
+      xintercept = min_signal,
       linetype = "dashed",
-      colour = cb_palette["Poor (<min)"],
-      linewidth = 1
+      color = cb_palette["Poor (<min)"],
+      size = 1
+    ) +
+    ggplot2::annotate(
+      "text",
+      x = min_signal,
+      y = Inf,
+      label = paste0("Min SNR = ", min_signal),
+      vjust = -0.5,
+      hjust = -0.1,
+      color = cb_palette["Poor (<min)"]
     ) +
     ggplot2::labs(
       title = "Distribution of Raw Peak SNR Values",
-      x = "Peak SNR",
+      x = "Raw Peak SNR",
       y = "Density",
-      fill = "Category"
+      fill = "SNR Category"
     ) +
     ggplot2::theme_minimal()
 
-  # -------------------------------
-  # INTERACTIVE SPECTRA PLOT
-  # -------------------------------
+  # --- Interactive Plotly plot ---
   outlier_plot <- NULL
+  if (!is.null(spectra_matrix)) {
+    if (is.null(ppm))
+      ppm <- as.numeric(colnames(spectra_matrix))
+    if (is.null(region))
+      region <- range(peak_signals$Peak.Shift, na.rm = TRUE)
 
-  if (!is.null(spectra.matrix)) {
-    if (is.null(ppm)) {
-      ppm <- as.numeric(colnames(spectra.matrix))
-    }
-
-    if (is.null(region)) {
-      region <- range(peaks.df$Peak.Shift, na.rm = TRUE)
-    }
-
-    samples <- unique(peaks.df$Spectra.ID)
-
-    if (!is.null(spectra.metadata)) {
-      treatment_map <- spectra.metadata[[treatment]][match(samples, spectra.metadata$Spectra.ID)]
+    samples <- unique(peak_signals$Spectra.ID)
+    if (!is.null(spectra_metadata)) {
+      treatments <- setNames(as.character(spectra_metadata[[treatment]][match(samples, spectra_metadata$Spectra.ID)]), samples)
+      if (!is.null(treatment_colours)) {
+        colors <- treatment_colours[treatments]
+      } else {
+        unique_treatments <- unique(treatments)
+        cb_plotly <- c(
+          "#E69F00",
+          "#56B4E9",
+          "#009E73",
+          "#F0E442",
+          "#0072B2",
+          "#D55E00",
+          "#CC79A7",
+          "#999999"
+        )
+        if (length(unique_treatments) > length(cb_plotly))
+          stop("More treatment groups than colors")
+        treatment_colours <- setNames(cb_plotly[seq_along(unique_treatments)], unique_treatments)
+        colors <- treatment_colours[treatments]
+      }
     } else {
-      treatment_map <- rep("Unknown", length(samples))
+      colors <- rep("#0072B2", length(samples))
     }
 
-    if (is.null(treatment.colours)) {
-      base_cols <- c(
+    outlier_plot <- plotly::plot_ly()
+    for (i in seq_along(samples)) {
+      sample <- samples[i]
+      sample_color <- colors[i]
+      row_idx <- which(rownames(spectra_matrix) == sample)
+      if (length(row_idx) > 0) {
+        region_idx <- which(ppm >= region[1] & ppm <= region[2])
+        sample_spectrum <- spectra_matrix[row_idx, region_idx]
+        ppm_region <- ppm[region_idx]
+
+        outlier_plot <- outlier_plot %>% plotly::add_trace(
+          type = 'scatter',
+          mode = 'lines',
+          x = ppm_region,
+          y = sample_spectrum,
+          line = list(color = sample_color, width = 2),
+          opacity = 0.4,
+          name = paste(sample, "(spectrum)")
+        )
+      }
+
+      sample_outliers <- dplyr::filter(peak_outliers, Spectra.ID == sample)
+      if (nrow(sample_outliers) > 0) {
+        outlier_plot <- outlier_plot %>% plotly::add_trace(
+          type = 'scatter',
+          mode = 'markers',
+          x = sample_outliers$Peak.Shift,
+          y = sample_outliers$Peak.AUC,
+          marker = list(
+            color = sample_color,
+            size = 8,
+            symbol = "circle"
+          ),
+          name = paste(sample, "(outliers)")
+        )
+      }
+    }
+
+    outlier_plot <- outlier_plot %>% plotly::layout(
+      title = "Outlier Peaks by Sample and Treatment",
+      xaxis = list(
+        title = "ppm",
+        autorange = "reversed",
+        range = rev(region)
+      ),
+      yaxis = list(title = "Peak Intensity"),
+      legend = list(
+        x = ifelse(legend_position == "right", 1.05, 0),
+        y = 1,
+        title = list(text = "<b>Sample</b>")
+      ),
+      hovermode = "closest"
+    )
+  }
+
+  # --- Chi-squared Peak Distribution ---
+  peak_position_hist <- NULL
+  peak_position_hist_combined <- NULL
+  chisq_annotations <- NULL
+  if (nrow(filtered_peaks) > 0) {
+    treatments <- levels(filtered_peaks[[treatment]])
+    if (is.null(treatment_colours)) {
+      cb_plotly <- c(
         "#E69F00",
         "#56B4E9",
         "#009E73",
@@ -304,110 +371,128 @@ peak_assessment <- function(peaks.df,
         "#CC79A7",
         "#999999"
       )
-      uniq <- unique(treatment_map)
-      treatment.colours <- setNames(base_cols[seq_along(uniq)], uniq)
+      treatment_colours <- setNames(cb_plotly[seq_along(treatments)], treatments)
     }
 
-    outlier_plot <- plotly::plot_ly()
+    # Chi-squared test per treatment
+    chisq_annotations <- data.frame(
+      Treatment = treatments,
+      label = sapply(treatments, function(trt) {
+        trt_peaks <- as.numeric(filtered_peaks$Peak.Shift[filtered_peaks[[treatment]] == trt])
+        if (length(trt_peaks) > 0) {
+          counts <- table(cut(trt_peaks, breaks = 50))
+          if (sum(counts) > 0) {
+            x <- stats::chisq.test(counts)
+            paste0(
+              "Chi² = ",
+              round(x$statistic, 2),
+              ", p = ",
+              format.pval(
+                x$p.value,
+                digits = 3,
+                eps = 1e-10
+              )
+            )
+          } else
+            "No data"
+        } else
+          "No data"
+      }),
+      stringsAsFactors = FALSE
+    )
 
-    region_idx <- which(ppm >= region[1] & ppm <= region[2])
-    ppm_region <- ppm[region_idx]
+    annotation_df <- dplyr::distinct(filtered_peaks, !!rlang::sym(treatment)) %>%
+      dplyr::left_join(chisq_annotations, by = setNames("Treatment", treatment))
 
-    for (i in seq_along(samples)) {
-      sid <- samples[i]
-      row_idx <- match(sid, rownames(spectra.matrix))
-
-      if (is.na(row_idx))
-        next
-
-      spec <- spectra.matrix[row_idx, region_idx]
-
-      outlier_plot <- plotly::add_trace(
-        outlier_plot,
-        type = "scatter",
-        mode = "lines",
-        x = ppm_region,
-        y = spec,
-        line = list(color = treatment.colours[treatment_map[i]], width = 2),
-        opacity = 0.4,
-        name = sid
+    peak_position_hist <- ggplot2::ggplot(
+      filtered_peaks,
+      ggplot2::aes(
+        x = Peak.Shift,
+        fill = !!rlang::sym(treatment),
+        color = !!rlang::sym(treatment)
+      )
+    ) +
+      ggplot2::geom_histogram(binwidth = 0.005,
+                              alpha = 0.5,
+                              position = "identity") +
+      ggplot2::geom_density(alpha = 0.3) +
+      ggplot2::scale_fill_manual(values = treatment_colours) +
+      ggplot2::scale_color_manual(values = treatment_colours) +
+      ggplot2::scale_x_reverse() +
+      ggplot2::labs(title = "Peak Distribution by Treatment", x = "ppm", y = "Count/Density") +
+      ggplot2::theme_minimal() +
+      ggplot2::theme(legend.position = legend_position) +
+      ggplot2::facet_wrap(as.formula(paste0("~", treatment)), scales = "free_y") +
+      ggplot2::geom_text(
+        data = annotation_df,
+        ggplot2::aes(
+          x = min(filtered_peaks$Peak.Shift),
+          y = Inf,
+          label = label
+        ),
+        inherit.aes = FALSE,
+        vjust = 2,
+        hjust = 1.5,
+        size = 3
       )
 
-      sample_out <- peak_outliers[peak_outliers$Spectra.ID == sid, ]
+    # Combined histogram
+    combined_peaks <- as.numeric(filtered_peaks$Peak.Shift)
+    if (length(combined_peaks) > 0) {
+      combined_counts <- table(cut(combined_peaks, breaks = 50))
+      combined_chisq <- if (sum(combined_counts) > 0)
+        stats::chisq.test(combined_counts)
+      else
+        NULL
+      combined_chisq_annotation <- data.frame(
+        label = if (!is.null(combined_chisq))
+          paste0(
+            "Chi² = ",
+            round(combined_chisq$statistic, 2),
+            ", p = ",
+            format.pval(
+              combined_chisq$p.value,
+              digits = 3,
+              eps = 1e-10
+            )
+          )
+        else
+          "No data",
+        x = min(filtered_peaks$Peak.Shift, na.rm = TRUE),
+        y = Inf
+      )
 
-      if (nrow(sample_out) > 0) {
-        outlier_plot <- plotly::add_trace(
-          outlier_plot,
-          type = "scatter",
-          mode = "markers",
-          x = sample_out$Peak.Shift,
-          y = sample_out$Peak.AUC,
-          marker = list(size = 8),
-          name = paste0(sid, " peaks")
+      peak_position_hist_combined <- ggplot2::ggplot(filtered_peaks, ggplot2::aes(x = Peak.Shift)) +
+        ggplot2::geom_histogram(binwidth = 0.005,
+                                fill = "#0072B2",
+                                alpha = 0.7) +
+        ggplot2::geom_density(color = "#D55E00", size = 1.2) +
+        ggplot2::scale_x_reverse() +
+        ggplot2::labs(title = "Combined Peak Distribution", x = "ppm", y = "Density") +
+        ggplot2::theme_minimal() +
+        ggplot2::geom_text(
+          data = combined_chisq_annotation,
+          ggplot2::aes(x = x, y = y, label = label),
+          inherit.aes = FALSE,
+          hjust = 1.5,
+          vjust = 2,
+          size = 3
         )
-      }
     }
+  }
 
-    outlier_plot <- plotly::layout(
-      outlier_plot,
-      title = "Outlier Peaks by Sample",
-      xaxis = list(
-        title = "ppm",
-        autorange = "reversed",
-        range = rev(region)
-      ),
-      yaxis = list(title = "Intensity"),
-      legend = list(x = ifelse(legend_position == "right", 1.05, 0))
+  return(
+    list(
+      filtered.peaks = filtered_peaks,
+      peak.outliers = peak_outliers,
+      SNR.density.plot = hist_plot,
+      peak.outlier.plot = outlier_plot,
+      peak.distribution.treatment = peak_position_hist,
+      peak.distribution.total = peak_position_hist_combined,
+      peak.distribution.chisq = chisq_annotations
     )
-  }
-
-  # -------------------------------
-  # PEAK DISTRIBUTIONS (kept, lightly cleaned)
-  # -------------------------------
-  peak_position_hist <- NULL
-  peak_position_hist_combined <- NULL
-  chisq_annotations <- NULL
-
-  if (nrow(filtered_peaks) > 0) {
-    filtered_peaks[[treatment]] <- factor(filtered_peaks[[treatment]])
-
-    peak_position_hist <- ggplot2::ggplot(filtered_peaks,
-                                          ggplot2::aes(
-                                            x = Peak.Shift,
-                                            fill = .data[[treatment]],
-                                            colour = .data[[treatment]]
-                                          )) +
-      ggplot2::geom_histogram(binwidth = 0.005, alpha = 0.5) +
-      ggplot2::geom_density(alpha = 0.3) +
-      ggplot2::scale_fill_manual(values = treatment.colours) +
-      ggplot2::scale_colour_manual(values = treatment.colours) +
-      ggplot2::scale_x_reverse() +
-      ggplot2::theme_minimal() +
-      ggplot2::facet_wrap(stats::as.formula(paste0("~", treatment)))
-
-    peak_position_hist_combined <- ggplot2::ggplot(filtered_peaks) +
-      ggplot2::geom_histogram(ggplot2::aes(x = Peak.Shift),
-                              binwidth = 0.005,
-                              fill = "#0072B2") +
-      ggplot2::geom_density(ggplot2::aes(x = Peak.Shift), colour = "#D55E00") +
-      ggplot2::scale_x_reverse() +
-      ggplot2::theme_minimal()
-  }
-
-  # -------------------------------
-  # RETURN
-  # -------------------------------
-  list(
-    filtered.peaks = filtered_peaks,
-    peak.outliers = peak_outliers,
-    SNR.density.plot = hist_plot,
-    peak.outlier.plot = outlier_plot,
-    peak.distribution.treatment = peak_position_hist,
-    peak.distribution.total = peak_position_hist_combined,
-    peak.distribution.chisq = chisq_annotations
   )
 }
-
 
 
 #' Function to plot detected peaks
@@ -436,18 +521,18 @@ plot_detected_peaks <- function(df,
                                 metadata = NULL,
                                 treatment = NULL) {
   # Validate input
-  if (!all(c("Sample", "peakPPM", "peakValue") %in% colnames(df))) {
-    stop("Input dataframe must contain 'Sample', 'peakPPM', and 'peakValue' columns.")
+  if (!all(c("Spectra.ID", "Peak.PPM", "Peak.AUC") %in% colnames(df))) {
+    stop("Input dataframe must contain 'Spectra.ID', 'Peak.PPM', and 'Peak.AUC' columns.")
   }
 
   # Set region if not supplied
   if (is.null(region)) {
-    region <- range(df$peakPPM, na.rm = TRUE)
+    region <- range(df$Peak.PPM, na.rm = TRUE)
   }
 
   # Filter peaks by region
-  df_region <- df %>% dplyr::filter(peakPPM >= region[1] &
-                                      peakPPM <= region[2])
+  df_region <- df %>% dplyr::filter(Peak.PPM >= region[1] &
+                                      Peak.PPM <= region[2])
 
   # Add reference if needed
   if (!is.null(reference) && !(reference %in% samples)) {
@@ -456,9 +541,9 @@ plot_detected_peaks <- function(df,
 
   # Filter by sample if given
   if (!is.null(samples)) {
-    df_region <- df_region %>% dplyr::filter(Sample %in% samples)
+    df_region <- df_region %>% dplyr::filter(Spectra.ID %in% samples)
   } else {
-    samples <- unique(df_region$Sample)
+    samples <- unique(df_region$Spectra.ID)
   }
 
   # ColorBlind-safe palette
@@ -548,8 +633,8 @@ plot_detected_peaks <- function(df,
     p <- p %>% plotly::add_trace(
       type = "scatter",
       mode = "markers",
-      x = sample_data$peakPPM,
-      y = sample_data$peakValue,
+      x = sample_data$Peak.PPM,
+      y = sample_data$Peak.AUC,
       name = paste(sample, " - Peaks (", treatment_labels[[sample]], ")"),
       marker = list(
         color = sample_color,

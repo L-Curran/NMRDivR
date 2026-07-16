@@ -19,5 +19,7 @@ Imports:
     plotly,
     praise,
     purrr,
+    speaq,
     stringr,
+    testthat,
     vegan
