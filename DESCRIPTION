@@ -11,3 +11,6 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/L-Curran/NMRDivR
 BugReports: https://github.com/L-Curran/NMRDivR/issues
+RoxygenNote: 7.3.3
+Imports: 
+    stringr
