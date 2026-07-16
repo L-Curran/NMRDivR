@@ -1,0 +1,24 @@
+##TITLE= Parameter file, TopSpin 3.6.5
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 16	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= uqtmcla2
+$$ 2023-04-28 19:59:42.572 +1000  UQ\uqtmcla2@CAI-NMR500
+$$ C:/data/uqtmcla2/N1Y23/1/acqu2s
+$$ process C:\Bruker\TopSpin3.6.5\prog\mod\go4.exe
+##$ACQT0= 0
+##$BF1= 500.13
+##$FnILOOP= 0
+##$FnMODE= 1
+##$NUC1= <1H>
+##$NusJSP= 0
+##$NusT2= 1
+##$NusTD= 14
+##$O1= 1800.94
+##$ProjAngle= 0
+##$SFO1= 500.13180094
+##$SW= 9.99736467587639
+##$SW_h= 5000
+##$TD= 14
+##END=

@@ -1,9 +1,3 @@
-# -------------------------------------------------------------------------
-# Vendored from: rnmrfit (version 1.0.0)
-# Original Author/Copyright: Stanislav Sokolenk", email = stanislav@sokolenko.net, author/creator
-# License: Apache (>= 2.0)
-#
-# Description:
 # Definition of a class structure for 1D NMR data.
 
 #------------------------------------------------------------------------
@@ -17,18 +11,18 @@
 #'                 intensity as columns.
 #' @slot acqus A list of acqus parameters.
 #' @slot procs A list of procs parameters.
-#' @slot product A vector representation of an apodization function that was
-#'               used to generate the intensity data (in this context,
-#'               zero-filling is considered to be the equivalent of
-#'               apodization by a step function). To facilitate convolution,
-#'               the length of this vector is set to 2*n - 1 where n is the
+#' @slot product A vector representation of an apodization function that was 
+#'               used to generate the intensity data (in this context, 
+#'               zero-filling is considered to be the equivalent of 
+#'               apodization by a step function). To facilitate convolution, 
+#'               the length of this vector is set to 2*n - 1 where n is the 
 #'               number of spectrum points.
 #' @slot convolution The Fourier transform of the product slot, suitable
 #'                   for convolution with the spectrum intensity data.
 #'
 #' @name NMRData1D-class
 #' @export
-NMRData1D <- setClass("NMRData1D",
+NMRData1D <- setClass("NMRData1D", 
                       contains = "NMRData",
                       slots = c(product = 'numeric',
                                 convolution = 'numeric'))
@@ -77,27 +71,27 @@ setValidity("NMRData1D", validNMRData1D)
 #------------------------------------------------------------------------
 #' Constructor for generating an NMRData1D object
 #'
-#' Loads data in JCAMP file or Bruker directory and uses it to initialize an
+#' Loads data in JCAMP file or Bruker directory and uses it to initialize an 
 #' NMRData1D object.
 #'
 #' @param path Path to a Bruker scan directory or JCAMP file.
 #' @param procs.number Specifies processing file number to use when loading
-#'                     from a Bruker scan directory. Defaults to the smallest
+#'                     from a Bruker scan directory. Defaults to the smallest 
 #'                     number in the pdata directory. Ignored if loading from
 #'                     a JCAMP file.
 #' @param blocks.number Specifies block number to use when loading from a
 #'                      JCAMP file. Defaults to the first block encountered.
-#'                      Ignored if loading from Bruker directory.
-#' @param ntuples.number Specifies ntuple entry number to use when loading
-#'                       from a JCAMP file. Defaults to the first ntuple
-#'                       entry encountered. Ignored if loading from Bruker
-#'                       directory.
-#'
+#'                      Ignored if loading from Bruker directory.  
+#' @param ntuples.number Specifies ntuple entry number to use when loading 
+#'                       from a JCAMP file. Defaults to the first ntuple 
+#'                       entry encountered. Ignored if loading from Bruker 
+#'                       directory.  
+#' 
 #' @return An NMRData1D object containing the 1r/1i processed data as well
 #'         as the procs and acqus parameters.
 #'
 #' @export
-nmrdata_1d <- function(path, procs.number = NA,
+nmrdata_1d <- function(path, procs.number = NA, 
                        blocks.number = NA, ntuples.number = NA) {
 
   # If file exists at path, treating import as JCAMP, otherwise, Bruker scan
@@ -124,7 +118,7 @@ nmrdata_1d <- function(path, procs.number = NA,
     # If ntuple number specified, check if it's valid
     if (! is.na(ntuples.number) ) {
       # Double check that specified block exists
-      msg <- sprintf('Specified NTUPLES number not found in block %i of %s',
+      msg <- sprintf('Specified NTUPLES number not found in block %i of %s', 
                      blocks.number, path)
       if ( ntuples.number > length(jcamp$blocks[[1]]) ) stop(msg)
     }
@@ -200,7 +194,7 @@ nmrdata_1d <- function(path, procs.number = NA,
 
     # Doing one final check on the direct shift to check on offset
     direct.shift <- frequency/jcamp.flat$sf
-
+    
     delta <- jcamp.flat$offset - max(direct.shift)
     if ( abs(delta) > 1e-6 ) direct.shift <- direct.shift + delta
 
@@ -211,7 +205,7 @@ nmrdata_1d <- function(path, procs.number = NA,
 
     # Returning class object
     new("NMRData1D", processed = processed, parameters = jcamp.flat,
-        procs = list(), acqus = list())
+                     procs = list(), acqus = list())       
   }
   else {
     # First, loading procs parameters
@@ -225,7 +219,7 @@ nmrdata_1d <- function(path, procs.number = NA,
 
     # Returning class object
     new("NMRData1D", processed = processed, parameters = list(),
-        procs = procs, acqus = acqus)
+                     procs = procs, acqus = acqus)
   }
 }
 
@@ -235,51 +229,51 @@ nmrdata_1d <- function(path, procs.number = NA,
 
 #------------------------------------------------------------------------
 
-#' @rdname processed
-#'
-setMethod("processed", "NMRData1D",
-          function(object) callNextMethod())
+#' @rdname processed 
+#' @export
+setMethod("processed", "NMRData1D", 
+  function(object) callNextMethod())
 
 #' @rdname processed-set
-#'
-setReplaceMethod("processed", "NMRData1D",
-                 function(object) callNextMethod())
+#' @export
+setReplaceMethod("processed", "NMRData1D", 
+  function(object) callNextMethod())
 
 #------------------------------------------------------------------------
 
 #' @rdname parameters
-#'
-setMethod("parameters", "NMRData1D",
-          function(object) callNextMethod())
+#' @export
+setMethod("parameters", "NMRData1D", 
+  function(object) callNextMethod())
 
 #' @rdname parameters-set
-#'
-setReplaceMethod("parameters", "NMRData1D",
-                 function(object) callNextMethod())
+#' @export
+setReplaceMethod("parameters", "NMRData1D", 
+  function(object) callNextMethod())
 
 #------------------------------------------------------------------------
 
-#' @rdname procs
-#'
-setMethod("procs", "NMRData1D",
-          function(object) callNextMethod())
+#' @rdname procs 
+#' @export
+setMethod("procs", "NMRData1D", 
+  function(object) callNextMethod())
 
 #' @rdname procs-set
-#'
-setReplaceMethod("procs", "NMRData1D",
-                 function(object) callNextMethod())
+#' @export
+setReplaceMethod("procs", "NMRData1D", 
+  function(object) callNextMethod())
 
 #------------------------------------------------------------------------
 
-#' @rdname acqus
-#'
-setMethod("acqus", "NMRData1D",
-          function(object) callNextMethod())
+#' @rdname acqus 
+#' @export
+setMethod("acqus", "NMRData1D", 
+  function(object) callNextMethod())
 
 #' @rdname acqus-set
-#'
-setReplaceMethod("acqus", "NMRData1D",
-                 function(object) callNextMethod())
+#' @export
+setReplaceMethod("acqus", "NMRData1D", 
+  function(object) callNextMethod())
 
 
 
@@ -288,20 +282,20 @@ setReplaceMethod("acqus", "NMRData1D",
 #========================================================================>
 
 #' @rdname as.list.NMRData
-#'
-setMethod("as.list", "NMRData1D",
-          function(x) {
-            callNextMethod()
-          })
+#' @export
+setMethod("as.list", "NMRData1D",  
+  function(x) {
+    callNextMethod()
+  })
 
 #------------------------------------------------------------------------
 
 #' @rdname as.data.frame.NMRData
-#'
-setMethod("as.data.frame", "NMRData1D",
-          function(x) {
-            callNextMethod()
-          })
+#' @export
+setMethod("as.data.frame", "NMRData1D",  
+  function(x) {
+    callNextMethod()
+  })
 
 
 
@@ -315,33 +309,33 @@ setMethod("as.data.frame", "NMRData1D",
 #' A safe method of getting a parameter value from either acqus or procs
 #' list with a fallback to generic parameters list.
 #'
-#' @name get_parameter
-#'
-setGeneric("get_parameter",
+#' @name get_parameter 
+#' @export
+setGeneric("get_parameter", 
            function(object, ...) standardGeneric("get_parameter"))
 
 #------------------------------------------------------------------------
 #' @param object An NMRData1D object.
-#' @param param.name Name of parameter entry.
+#' @param param.name Name of parameter entry. 
 #' @param list.name Name of slot list to acqus (basically either 'acqus' or
 #'                  'procs')
 #' @param error Issue an error if the required parameters can't be found.
 #'
 #' @rdname get_parameter
-#'
-setMethod("get_parameter", "NMRData1D",
-          function(object, param.name, list.name, error = FALSE) {
+#' @export
+setMethod("get_parameter", "NMRData1D", 
+  function(object, param.name, list.name, error = FALSE) {
 
-            value <- slot(object, list.name)[[param.name]]
+    value <- slot(object, list.name)[[param.name]]
 
-            if ( is.null(value) ) value <- object@parameters[[param.name]]
+    if ( is.null(value) ) value <- object@parameters[[param.name]]
 
-            msg <- sprintf('Parameter "%s" not found in "%s" or parameters list',
-                           param.name, list.name)
-            if ( error && is.null(value) ) stop(msg)
+    msg <- sprintf('Parameter "%s" not found in "%s" or parameters list',
+                   param.name, list.name)
+    if ( error && is.null(value) ) stop(msg)
 
-            value
-          })
+    value
+  })
 
 #------------------------------------------------------------------------
 #' Display NMRData1D object
@@ -349,13 +343,13 @@ setMethod("get_parameter", "NMRData1D",
 #' Display a quick summary of the processed data.frame.
 #'
 #' @name show
-#'
-setMethod("show", "NMRData1D",
-          function(object) {
-            cat('An object of NMRData1D class\n')
-            print(summary(object@processed))
-            cat('\n')
-          })
+#' @export
+setMethod("show", "NMRData1D", 
+  function(object) {
+    cat('An object of NMRData1D class\n')
+    print(summary(object@processed))
+    cat('\n')
+  })
 
 #------------------------------------------------------------------------
 #' Set convolution applied to processed data
@@ -363,17 +357,17 @@ setMethod("show", "NMRData1D",
 #' Although it's possible to fit the processed data based on its final
 #' appearance, it may sometimes be more useful to try and fit the underlying
 #' lineshape with an explicit consideration of the convolution that it has
-#' undergone. This convolution includes any apodization as well as the process
-#' of zero-filling, which can be considered as the convolution of a
-#' hypothetically longer experiment by a step function. By default, the
+#' undergone. This convolution includes any apodization as well as the process 
+#' of zero-filling, which can be considered as the convolution of a 
+#' hypothetically longer experiment by a step function. By default, the 
 #' applied apodization is read from the procs parameters, but these can
 #' be overwritten by either a list of parameters or a custom function.
 #'
 #' @param object An NMRData1D object.
-#' @param trim Number of point to truncate from the end of the fid's
-#'             acquisition time (not including zero fill). It's common to
-#'             circle shift Bruker's group delay artefact from the start of
-#'             a collected fid to the last 50-100 points. While most
+#' @param trim Number of point to truncate from the end of the fid's 
+#'             acquisition time (not including zero fill). It's common to 
+#'             circle shift Bruker's group delay artefact from the start of 
+#'             a collected fid to the last 50-100 points. While most 
 #'             apodization methods will passively get rid of or diminish the
 #'             influence of these points, they may have a stronger impact
 #'             with minimal or no apodization.
@@ -381,116 +375,116 @@ setMethod("show", "NMRData1D",
 #'              (see apodize_signal) for a full list of apodizations and their
 #'              parameters. E.g. list('exponential'=list('lb'=1)).
 #' @param f A function f(n) capable of generating the convolution vector
-#'          of length n (ranging from 0 to the acquisition time). If provided,
+#'          of length n (ranging from 0 to the acquisition time). If provided, 
 #'          f overrides the param list.
 #'
-#' @return An NMRData1D object with modified convolution vector.
+#' @return An NMRData1D object with modified convolution vector. 
 #'
 #' @name set_convolution
-#'
-setGeneric("set_convolution",
-           function(object, trim = 0, param = list(), f = NULL) {
-             standardGeneric("set_convolution")
-           })
+#' @export
+setGeneric("set_convolution", 
+  function(object, trim = 0, param = list(), f = NULL) {
+    standardGeneric("set_convolution")
+  })
 
 #' @rdname set_convolution
-#'
+#' @export
 setMethod("set_convolution", "NMRData1D",
-          function(object, trim = 0, param = list(), f = NULL) {
+  function(object, trim = 0, param = list(), f = NULL) {
 
-            processed <- object@processed
+    processed <- object@processed
 
-            # Erroring out for unevenly sampled data
-            differences <- sort(unique(diff(processed$direct.shift)))
-            if ( (length(differences) > 1) &&
-                 any(abs(diff(differences)) > 1e-10) ) {
-              msg <- 'Convolution vectors can only be set for evenly sampled data.'
-              stop(msg, call. = TRUE)
-            }
+    # Erroring out for unevenly sampled data
+    differences <- sort(unique(diff(processed$direct.shift)))
+    if ( (length(differences) > 1) && 
+         any(abs(diff(differences)) > 1e-10) ) {
+      msg <- 'Convolution vectors can only be set for evenly sampled data.'
+      stop(msg, call. = TRUE)
+    }
 
-            si <- get_parameter(object, 'si', 'procs')
-            td <- get_parameter(object, 'td', 'acqus')
-            sw <- get_parameter(object, 'sw.h', 'acqus')
+    si <- get_parameter(object, 'si', 'procs')
+    td <- get_parameter(object, 'td', 'acqus')
+    sw <- get_parameter(object, 'sw.h', 'acqus')
 
-            # Correcting group delay
-            if ( trim > 0 ) {
-              processed <- processed[order(processed$direct.shift), ]
-              signal <- ifft(ifftshift(processed$intensity))
-              index <- 1:(round(td/2) - trim)
-              signal[-index] <- 0
-              processed$intensity <- fftshift(fft(signal))
+    # Correcting group delay
+    if ( trim > 0 ) {
+      processed <- processed[order(processed$direct.shift), ]
+      signal <- ifft(ifftshift(processed$intensity))
+      index <- 1:(round(td/2) - trim)
+      signal[-index] <- 0
+      processed$intensity <- fftshift(fft(signal))
 
-              object@processed <- processed
-            }
+      object@processed <- processed
+    }
 
-            # Defining what fraction of overall points are signal (vs. zero-fill)
-            frac <- (td/2 - trim)/si
-            aq <- 1/(sw)*(td/2 - trim)
+    # Defining what fraction of overall points are signal (vs. zero-fill)
+    frac <- (td/2 - trim)/si
+    aq <- 1/(sw)*(td/2 - trim)
 
-            # If param is empty, building up the list from the procs parameters
-            if ( length(param) == 0 ) {
+    # If param is empty, building up the list from the procs parameters
+    if ( length(param) == 0 ) {
 
-              lb <- get_parameter(object, 'lb', 'procs')
-              gb <- get_parameter(object, 'gb', 'procs')
-              ssb <- get_parameter(object, 'ssb', 'procs')
-              tm1 <- get_parameter(object, 'tm1', 'procs')
-              tm2 <- get_parameter(object, 'tm2', 'procs')
+      lb <- get_parameter(object, 'lb', 'procs')
+      gb <- get_parameter(object, 'gb', 'procs')
+      ssb <- get_parameter(object, 'ssb', 'procs')
+      tm1 <- get_parameter(object, 'tm1', 'procs')
+      tm2 <- get_parameter(object, 'tm2', 'procs')
 
-              if ( lb != 0 ) {
-                if ( lb > 0 ) param$exponential <- list(lb = lb)
-                else param$gaussian <- list(lb = lb, gb = gb)
-              }
+      if ( lb != 0 ) {
+        if ( lb > 0 ) param$exponential <- list(lb = lb)
+        else param$gaussian <- list(lb = lb, gb = gb)
+      }
 
-              if ( ssb != 0 ) {
-                msg <- paste('Assuming that "ssb" parameter pertains to sine rather',
-                             'than qsin apodization. Use "param" to override.')
-                warning(msg, call. = TRUE)
+      if ( ssb != 0 ) {
+        msg <- paste('Assuming that "ssb" parameter pertains to sine rather',
+                     'than qsin apodization. Use "param" to override.')
+        warning(msg, call. = TRUE)
 
-                param$sine <- list(ssb = ssb)
-              }
+        param$sine <- list(ssb = ssb)
+      }
 
-              if ( (tm1 !=0 ) || (tm2 != 0) ) {
-                param$trapezoid <- list(tm1 = tm1, tm2 = tm2)
-              }
-            }
+      if ( (tm1 !=0 ) || (tm2 != 0) ) {
+        param$trapezoid <- list(tm1 = tm1, tm2 = tm2)
+      }
+    }
 
-            # If f is not defined, building f from param list
-            if ( is.null(f) ) {
+    # If f is not defined, building f from param list
+    if ( is.null(f) ) {
 
-              valid.names <- c('exponential', 'gaussian', 'sine', 'sine2', 'trapezoid')
-              if ( any(! names(param) %in% valid.names) ) {
-                msg <- sprintf('Names of "param" list must only include: %s',
-                               paste(valid.names, collapse = ', '))
-                stop(msg, call. = TRUE)
-              }
+      valid.names <- c('exponential', 'gaussian', 'sine', 'sine2', 'trapezoid')
+      if ( any(! names(param) %in% valid.names) ) {
+        msg <- sprintf('Names of "param" list must only include: %s',
+                       paste(valid.names, collapse = ', '))
+        stop(msg, call. = TRUE)
+      }
 
-              f <- function(n) {
+      f <- function(n) {
+        
+        direct.time <- seq(0, aq, length.out = n)
+        signal <- rep(1, n)
 
-                direct.time <- seq(0, aq, length.out = n)
-                signal <- rep(1, n)
+        # Looping through the apodizations
+        for ( method in names(param) ) {
+          apod.args <- list(direct.time = direct.time, fid = signal)
+          apod.args <- c(apod.args, method = method, as.list(param[[method]]))
 
-                # Looping through the apodizations
-                for ( method in names(param) ) {
-                  apod.args <- list(direct.time = direct.time, fid = signal)
-                  apod.args <- c(apod.args, method = method, as.list(param[[method]]))
+          signal <- do.call(apodize_signal, apod.args)
+        }
 
-                  signal <- do.call(apodize_signal, apod.args)
-                }
+        signal
+      }
+    }
 
-                signal
-              }
-            }
+    # Filling in values
+    n.out <- 2*nrow(processed) - 1
+    n.signal <- round(frac*n.out)
+    n.fill <- n.out - n.signal
+    product <- c(f(n.signal), rep(0, n.fill))
+    object@product <- product/sum(abs(product))
+    object@convolution <- Re(fftshift(fft(object@product)))
 
-            # Filling in values
-            n.out <- 2*nrow(processed) - 1
-            n.signal <- round(frac*n.out)
-            n.fill <- n.out - n.signal
-            product <- c(f(n.signal), rep(0, n.fill))
-            object@product <- product/sum(abs(product))
-            object@convolution <- Re(fftshift(fft(object@product)))
-
-            object
-          })
+    object
+  })
 
 #------------------------------------------------------------------------
 #' Filter 1D chemical shift data by selecting specific regions
@@ -508,110 +502,110 @@ setMethod("set_convolution", "NMRData1D",
 #' @return An NMRData1D object with filtered processed data.
 #'
 #' @name filter_1d
-#'
-setGeneric("filter_1d",
-           function(object, lower = NULL, upper = NULL, round.up = FALSE, ...) {
-             standardGeneric("filter_1d")
-           })
+#' @export
+setGeneric("filter_1d", 
+  function(object, lower = NULL, upper = NULL, round.up = FALSE, ...) {
+    standardGeneric("filter_1d")
+  })
 
-#' @rdname filter_1d
-#'
-setMethod("filter_1d", "NMRData1D",
-          function(object, lower, upper, round.up) {
+#' @rdname filter_1d 
+#' @export
+setMethod("filter_1d", "NMRData1D", 
+  function(object, lower, upper, round.up) {
 
-            x <- object@processed$direct.shift
+    x <- object@processed$direct.shift
+  
+    if ( is.null(lower) ) lower <- min(x)
+    if ( is.null(upper) ) upper <- max(x)
 
-            if ( is.null(lower) ) lower <- min(x)
-            if ( is.null(upper) ) upper <- max(x)
+    # Checking bounds
+    if ( lower > upper ) {
+      msg <- 'The lower bound must be smaller than or equal to the upper bound.'
+      stop(msg)
+    }
 
-            # Checking bounds
-            if ( lower > upper ) {
-              msg <- 'The lower bound must be smaller than or equal to the upper bound.'
-              stop(msg)
-            }
+    if ( length(c(lower, upper)) != 2 ) {
+      msg <- 'Multiple range definition is not currently supported.'
+      stop(msg)
+    }
 
-            if ( length(c(lower, upper)) != 2 ) {
-              msg <- 'Multiple range definition is not currently supported.'
-              stop(msg)
-            }
+    # If x happens to be empty, don't do anything else
+    if ( length(x) == 0 ) return(object)
 
-            # If x happens to be empty, don't do anything else
-            if ( length(x) == 0 ) return(object)
+    # Warning if bounds are outside range of chemical shifts 
+    if ( (lower > max(x)) | (upper < min(x)) ) {
+      msg <- 'Some bounds are entirely out of chemical shift range'
+      warning(msg, call. = FALSE)
+    }
 
-            # Warning if bounds are outside range of chemical shifts
-            if ( (lower > max(x)) | (upper < min(x)) ) {
-              msg <- 'Some bounds are entirely out of chemical shift range'
-              warning(msg, call. = FALSE)
-            }
+    # Generating index
+    index <- (x > lower) & (x < upper)
 
-            # Generating index
-            index <- (x > lower) & (x < upper)
+    # Rounding if necessary
+    if ( round.up ) {
+      n <- sum(index)
+      pwr = log(n)/log(2)
 
-            # Rounding if necessary
-            if ( round.up ) {
-              n <- sum(index)
-              pwr = log(n)/log(2)
+      n.new <- 2^ceiling(pwr)
+      n.extra <- n.new - n
 
-              n.new <- 2^ceiling(pwr)
-              n.extra <- n.new - n
-
-              # Figuring out if there is space to add new points equally on either side
-              rle.index <- rle(index)
+      # Figuring out if there is space to add new points equally on either side
+      rle.index <- rle(index)
 
 
-              # If there are three entries, they are FALSE, TRUE, FALSE
-              if ( length(rle.index$value) == 3 ) {
-                left.count <- rle.index$lengths[1]
-                i.left <- left.count + 1
+      # If there are three entries, they are FALSE, TRUE, FALSE
+      if ( length(rle.index$value) == 3 ) {
+        left.count <- rle.index$lengths[1]
+        i.left <- left.count + 1
 
-                right.count <- rle.index$lengths[3]
-                i.right <- sum(rle.index$lengths[1:2])
+        right.count <- rle.index$lengths[3]
+        i.right <- sum(rle.index$lengths[1:2])
+        
+        n.left <- min(left.count, floor(n.extra/2))
+        index[(i.left - n.left):(i.left - 1)] <- TRUE
+        n.extra <- n.extra - n.left
 
-                n.left <- min(left.count, floor(n.extra/2))
-                index[(i.left - n.left):(i.left - 1)] <- TRUE
-                n.extra <- n.extra - n.left
+        n.right <- min(right.count, n.extra)
+        index[(i.right + 1):(i.right + n.right)] <- TRUE
+        n.extra <- n.extra - n.right
+      # If there are two entries, they are TRUE FALSE, or FALSE TRUE
+      } else if ( length(rle.index$value) == 2 ) {
+        if ( rle.index$value[1] ) {
+          right.count <- rle.index$lengths[2]
+          i.right <- rle.index$lengths[1:2]
+          n.right <- min(right.count, n.extra)
+          index[(i.right + 1):(i.right + n.right)] <- TRUE
+          n.extra <- n.extra - n.right
+        } else {
+          left.count <- rle.index$lengths[1]
+          i.left <- left.count + 1
+          n.left <- min(left.count, n.extra)
+          index[(i.left - n.left):(i.left - 1)] <- TRUE
+          n.extra <- n.extra - n.left
+        }
+      } 
+    
+      # Checking if there are any more indexes unaccounted for
+      if ( n.extra > 0 ) {
+        msg <- 'It was not possible to round desired range to a power of 2.'
+        warning(msg, call. = FALSE)
+      }
+    
+    }
 
-                n.right <- min(right.count, n.extra)
-                index[(i.right + 1):(i.right + n.right)] <- TRUE
-                n.extra <- n.extra - n.right
-                # If there are two entries, they are TRUE FALSE, or FALSE TRUE
-              } else if ( length(rle.index$value) == 2 ) {
-                if ( rle.index$value[1] ) {
-                  right.count <- rle.index$lengths[2]
-                  i.right <- rle.index$lengths[1:2]
-                  n.right <- min(right.count, n.extra)
-                  index[(i.right + 1):(i.right + n.right)] <- TRUE
-                  n.extra <- n.extra - n.right
-                } else {
-                  left.count <- rle.index$lengths[1]
-                  i.left <- left.count + 1
-                  n.left <- min(left.count, n.extra)
-                  index[(i.left - n.left):(i.left - 1)] <- TRUE
-                  n.extra <- n.extra - n.left
-                }
-              }
+    object@processed <- object@processed[index, ]
 
-              # Checking if there are any more indexes unaccounted for
-              if ( n.extra > 0 ) {
-                msg <- 'It was not possible to round desired range to a power of 2.'
-                warning(msg, call. = FALSE)
-              }
+    # Adjusting length of convolution vectors
+    if ( length(object@product) > 0 ) {
+      n <- 2*sum(index) - 1
+      product <- object@product
+      object@product <- approx(1:length(product), product, n = n)$y
+      object@product <- object@product/sum(object@product)
+      object@convolution <- Re(fftshift(fft(object@product)))
+    }
 
-            }
-
-            object@processed <- object@processed[index, ]
-
-            # Adjusting length of convolution vectors
-            if ( length(object@product) > 0 ) {
-              n <- 2*sum(index) - 1
-              product <- object@product
-              object@product <- approx(1:length(product), product, n = n)$y
-              object@product <- object@product/sum(object@product)
-              object@convolution <- Re(fftshift(fft(object@product)))
-            }
-
-            object
-          })
+    object
+  })
 
 #========================================================================>
 # Defining a plot function
@@ -627,10 +621,10 @@ setMethod("filter_1d", "NMRData1D",
 #'                   imaginary or both components. If both components
 #'                   are selected, they are displayed in separate subplots.
 #' @param nrows Max number of rows to display subplots.
-#' @param reverse TRUE to order x-axis with large values on the left and
+#' @param reverse TRUE to order x-axis with large values on the left and 
 #'                small values on the right like typical NMR plots.
 #'
-#'
+#' @export
 plot.NMRData1D <- function(x, components = 'r', nrows = 2, reverse = TRUE) {
   d <- processed(x)
 
@@ -638,10 +632,10 @@ plot.NMRData1D <- function(x, components = 'r', nrows = 2, reverse = TRUE) {
   legend.opts <- list(orientation = 'h', xanchor = "center", x = 0.5)
 
   if ( grepl('r', components) ) {
-    p <- plot_ly(x = d$direct.shift, y = Re(d$intensity),
+    p <- plot_ly(x = d$direct.shift, y = Re(d$intensity), 
                  color = I('black'), name = 'Real') %>%
-      add_lines()  %>%
-      layout(legend = legend.opts)
+           add_lines()  %>%
+           layout(legend = legend.opts)
 
     if ( reverse ) p <- p %>% layout(xaxis = list(autorange = "reversed"))
 
@@ -649,10 +643,10 @@ plot.NMRData1D <- function(x, components = 'r', nrows = 2, reverse = TRUE) {
   }
 
   if ( grepl('i', components) ) {
-    p <- plot_ly(x = d$direct.shift, y = Im(d$intensity),
+    p <- plot_ly(x = d$direct.shift, y = Im(d$intensity), 
                  color = I('grey'), name = 'Imaginary') %>%
-      add_lines()  %>%
-      layout(legend = legend.opts)
+           add_lines()  %>%
+           layout(legend = legend.opts)
 
     if ( reverse ) p <- p %>% layout(xaxis = list(autorange = "reversed"))
 
@@ -660,7 +654,7 @@ plot.NMRData1D <- function(x, components = 'r', nrows = 2, reverse = TRUE) {
   }
 
   if ( length(plots) == 0 ) NULL
-  else subplot(plots, shareX = TRUE, shareY = TRUE,
+  else subplot(plots, shareX = TRUE, shareY = TRUE, 
                nrows = min(length(plots), nrows))
 }
 

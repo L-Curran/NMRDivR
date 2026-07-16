@@ -1,10 +1,3 @@
-# -------------------------------------------------------------------------
-# Vendored from: rnmrfit (version 1.0.0)
-# Original Author/Copyright: Stanislav Sokolenk", email = stanislav@sokolenko.net, author/creator
-# License: Apache (>= 2.0)
-#
-# Description:
-
 # Definition of a super class structure for NMR data.
 
 #------------------------------------------------------------------------
@@ -18,7 +11,7 @@
 #' @slot procs A list of parameters sepcific to procs file.
 #'
 #' @name NMRData-class
-#'
+#' @export
 NMRData <- setClass("NMRData",
                     slots = c(processed = "data.frame",
                               parameters = "list",
@@ -33,119 +26,119 @@ NMRData <- setClass("NMRData",
 
 
 #------------------------------------------------------------------------
-#' @templateVar slot processed
+#' @templateVar slot processed 
 #' @template NMRData_access
 #' @name processed
-#'
-setGeneric("processed",
+#' @export
+setGeneric("processed", 
            function(object, ...) standardGeneric("processed"))
 
 #' @rdname processed
-#'
-setMethod("processed", "NMRData",
+#' @export
+setMethod("processed", "NMRData", 
           function(object) object@processed)
 
-#' @templateVar slot processed
+#' @templateVar slot processed 
 #' @template NMRData_replacement
 #' @name processed-set
-#'
-setGeneric("processed<-",
+#' @export
+setGeneric("processed<-", 
            function(object, value) standardGeneric("processed<-"))
 
 #' @rdname processed-set
-#'
+#' @export
 setReplaceMethod("processed", "NMRData",
                  function(object, value) {
                    object@processed <- value
                    validObject(object)
-                   object
+                   object 
                  })
 
 #------------------------------------------------------------------------
-#' @templateVar slot parameters
+#' @templateVar slot parameters 
 #' @template NMRData_access
 #' @name parameters
-#'
-setGeneric("parameters",
+#' @export
+setGeneric("parameters", 
            function(object, ...) standardGeneric("parameters"))
 
 #' @rdname parameters
-#'
-setMethod("parameters", "NMRData",
+#' @export
+setMethod("parameters", "NMRData", 
           function(object) object@parameters)
 
-#' @templateVar slot parameters
+#' @templateVar slot parameters 
 #' @template NMRData_replacement
 #' @name parameters-set
-#'
-setGeneric("parameters<-",
+#' @export
+setGeneric("parameters<-", 
            function(object, value) standardGeneric("parameters<-"))
 
 #' @rdname parameters-set
-#'
+#' @export
 setReplaceMethod("parameters", "NMRData",
                  function(object, value) {
                    object@parameters <- value
                    validObject(object)
-                   object
+                   object 
                  })
 
 #------------------------------------------------------------------------
-#' @templateVar slot procs
+#' @templateVar slot procs 
 #' @template NMRData_access
 #' @name procs
-#'
-setGeneric("procs",
+#' @export
+setGeneric("procs", 
            function(object, ...) standardGeneric("procs"))
 
 #' @rdname procs
-#'
-setMethod("procs", "NMRData",
+#' @export
+setMethod("procs", "NMRData", 
           function(object) object@procs)
 
-#' @templateVar slot procs
+#' @templateVar slot procs 
 #' @template NMRData_replacement
 #' @name procs-set
-#'
-setGeneric("procs<-",
+#' @export
+setGeneric("procs<-", 
            function(object, value) standardGeneric("procs<-"))
 
 #' @rdname procs-set
-#'
+#' @export
 setReplaceMethod("procs", "NMRData",
                  function(object, value) {
                    object@procs <- value
                    validObject(object)
-                   object
+                   object 
                  })
 
 #------------------------------------------------------------------------
-#' @templateVar slot acqus
+#' @templateVar slot acqus 
 #' @template NMRData_access
 #' @name acqus
-#'
-setGeneric("acqus",
+#' @export
+setGeneric("acqus", 
            function(object, ...) standardGeneric("acqus"))
 
 #' @rdname acqus
-#'
-setMethod("acqus", "NMRData",
+#' @export
+setMethod("acqus", "NMRData", 
           function(object) object@acqus)
 
-#' @templateVar slot acqus
+#' @templateVar slot acqus 
 #' @template NMRData_replacement
 #' @name acqus-set
-#'
-setGeneric("acqus<-",
+#' @export
+setGeneric("acqus<-", 
            function(object, value) standardGeneric("acqus<-"))
 
 #' @rdname acqus-set
-#'
+#' @export
 setReplaceMethod("acqus", "NMRData",
                  function(object, value) {
                    object@acqus <- value
                    validObject(object)
-                   object
+                   object 
                  })
 
 
@@ -161,9 +154,9 @@ setReplaceMethod("acqus", "NMRData",
 #'
 #' @param x NMRData object.
 #'
-#'
+#' @export
 as.list.NMRData <- function(x) {
-  list(processed = x@processed, parameters = x@parameters,
+  list(processed = x@processed, parameters = x@parameters, 
        procs = x@procs, acqus = x@acqus)
 }
 
@@ -176,7 +169,7 @@ setMethod("as.list", "NMRData", as.list.NMRData)
 #'
 #' @param x NMRData object.
 #'
-#'
+#' @export
 as.data.frame.NMRData <- function(x) {
   x@processed
 }

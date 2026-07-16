@@ -1,0 +1,46 @@
+##TITLE= Parameter file, TopSpin 4.2.0
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 88	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= s4583990
+$$ 2024-01-04 13:42:57.244 +1000  UQ\s4583990@SEES-39W8QN3
+$$ R:/LC23PHD-A10097/NMR/Spectra Aug Good/s4583990/N7Y23/1/pdata/1/t1par
+$$ process C:\Bruker\TopSpin4.2.0\prog\mod\dataserver.exe
+##$BIGDEL= 100
+##$CALCDN= yes
+##$COMPNO= 1
+##$CONV= 1e-005
+##$CURSOR= 2
+##$DRIFT= 5
+##$EDGUESS= 0
+##$EDPARM= 0
+##$FCTTYPE= 0
+##$FIDNUMB= 14
+##$FITT1T2= 0
+##$FITTYPE= 1
+##$GAMM= 10000
+##$GRADIEN= 1
+##$GUESSES= (0..23)
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##$INC= 1
+##$INTRNG= 1
+##$LISTINC= 0.001
+##$LISTTYP= <vdlist>
+##$LITDEL= 10
+##$MAXPNTS= 14
+##$NUMPNTS= 14
+##$NUMTERM= 3
+##$PARM= (0..11)
+-0.992280329310417 1.59557179723492 2.3489075167292 0 0 0 0 0 0 0 0 0
+##$PDTYP= <pd>
+##$REGIONS= 2
+##$SHOWINT= yes
+##$SHOWPP= yes
+##$SHOWTXT= 1
+##$START= 1
+##$X_END= 20
+##$X_START= 0.01
+##$Y_END= 5.862222e+009
+##$Y_START= -9.503182e+009
+##END=

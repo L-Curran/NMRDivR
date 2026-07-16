@@ -1,0 +1,39 @@
+##TITLE= Audit trail, TopSpin 3.6.5
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= s4583990
+$$ C:/data/s4583990/N43Y23/1/pdata/1/auditp.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2023-08-26 12:40:27.451 +1000>,<UQ\s4583990>,<CAI-NMR500>,<go4>,<TopSpin 3.6.5>,
+      <created by zg on data set with UUID '6017a4a6-43af-11ee-be9b-b49691cb4abd'
+       started at 2023-08-26 11:25:00.683 +1000,
+       POWCHK enabled, PULCHK disabled,
+       completed at 2023-08-26 12:40:27.451 +1000
+
+       configuration hash MD5:
+       A7 F2 E1 50 99 A4 33 43 1F A0 8B 66 5A 28 0D 0C
+       data hash MD5: 64K * 14
+       52 55 F4 53 1D D2 77 7F 88 8E D9 A5 74 95 D2 5B>)
+(   2,<2023-08-26 12:40:31.755 +1000>,<UQ\s4583990>,<CAI-NMR500>,<proc2d>,<TopSpin 3.6.5>,
+      <Start of raw data processing
+       xf2 F2: SI = 128K WDW = 1 LB = 4 FT_mod = 6 PKNL = 1 PHC0 = 439.0185 PHC1 = -1990.893 F1: SI = 16
+       data hash MD5: 128K * 16
+       BD 15 28 E0 E4 C7 69 E9 0F CB D3 98 56 CE 61 90>)
+(   3,<2023-08-26 12:41:02.049 +1000>,<UQ\s4583990>,<CAI-NMR500>,<proc2d>,<TopSpin 3.6.5>,
+      <pk2 fgphup F2: PHC0 = -39.65937 PHC1 = 179.2
+       data hash MD5: 128K * 16
+       02 7D 1E 11 C0 39 FA 42 43 B5 37 60 DB 4F AE CF>)
+(   4,<2023-08-26 12:41:04.243 +1000>,<UQ\s4583990>,<CAI-NMR500>,<proc2d>,<TopSpin 3.6.5>,
+      <abs2 F2: ABSG = 5 ABSF1 = -17.47083 ABSF2 = -17.69565
+       data hash MD5: 128K * 16
+       D1 CF 36 2C 3D F5 03 73 90 62 C1 7A 89 90 39 CA>)
+$$ R:/LC23PHD-A10097/NMR/Spectra Aug Good/s4583990/N43Y23/1/pdata/1/auditp.txt
+(   5,<2024-01-11 12:58:33.761 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<proc2d>,<TopSpin 4.2.0>,
+      <Start of raw data processing
+       xf2 F2: SI = 128K WDW = 1 LB = 4 FT_mod = 6 PKNL = 1 PHC0 = 399.3591 PHC1 = -1811.693 F1: SI = 16
+       data hash MD5: 128K * 16
+       F6 DE C1 F2 3F F8 E8 90 AC 64 0F 19 2C 6A F0 9A>)
+##END=
+
+$$ hash MD5
+$$ 17 D8 20 0E 34 57 34 8C 67 CD 7E 7A 9F EA 43 0C

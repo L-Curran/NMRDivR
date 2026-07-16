@@ -1,0 +1,4 @@
+A 1.0 #regions in PPM
+# low field   high field  bias        slope
+  16.8472310513134  16.68127932829145  -0.0  -0.0  # for region 1
+  5.550407082614101  5.388805084688047  -0.0  -0.0  # for region 2

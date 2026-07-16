@@ -1,11 +1,3 @@
-# -------------------------------------------------------------------------
-# Vendored from: rnmrfit (version 1.0.0)
-# Original Author/Copyright: Stanislav Sokolenk", email = stanislav@sokolenko.net, author/creator
-# License: Apache (>= 2.0)
-#
-# Description: Helper functions
-
-
 # Broadly-used utility functions
 
 #------------------------------------------------------------------------
@@ -21,7 +13,7 @@
 #
 #' @return Character or numeric vector depending on input data.
 #'
-#'
+#' @export
 safe_read <- function(path, data, ...) {
 
   # Checking if path is a directory
@@ -38,7 +30,7 @@ safe_read <- function(path, data, ...) {
 
   # Choosing read function
   if (data == 'char') {
-    if (!'nchars' %in% list(...)) {
+    if (!'nchars' %in% list(...)) { 
       f_read <- function(path, ...) {
         nchars <- file.info(path)$size
         readChar(path, nchars, ...)
@@ -59,7 +51,7 @@ safe_read <- function(path, data, ...) {
     msg <- '"data" argument must be either "char" or "bin"'
     stop(msg, .call = FALSE)
   }
-
+  
   out <- f_read(path, ...)
 
   return(out)
@@ -68,7 +60,7 @@ safe_read <- function(path, data, ...) {
 #------------------------------------------------------------------------
 #' Validate and extract acqus/procs parameters
 #'
-#' Checks to see whether required acqus or procs parameters are present in
+#' Checks to see whether required acqus or procs parameters are present in 
 #' main list or appriate sublist. Outputs the required parameters if
 #' all are present and issues an error otherwise. This function is mainly
 #' intended for internal use.
@@ -79,27 +71,27 @@ safe_read <- function(path, data, ...) {
 #'
 #' @return A list containing only the required parameters
 #'
-#'
+#' @export
 validate_param <- function(param.list, required.param, sublist = NULL) {
 
-  missing <- ! required.param %in% names(param.list)
-
-  # If all parameters are missing, check to see if the parameters
-  # are nested within a sublist.
-  if (all(missing) && !is.null(sublist)) {
-    param.list <- param.list[[sublist]]
     missing <- ! required.param %in% names(param.list)
-  }
 
-  # If any parameters are still missing, issue error
-  if (any(missing)) {
-    msg <- sprintf('The following parameters are missing: %s',
-                   paste(required.param[missing], collapse=', '))
-    stop(msg)
-  }
+    # If all parameters are missing, check to see if the parameters
+    # are nested within a sublist.
+    if (all(missing) && !is.null(sublist)) {
+      param.list <- param.list[[sublist]]
+      missing <- ! required.param %in% names(param.list)
+    }
 
-  # Otherwise, returning the required parameters
-  param.list[required.param]
+    # If any parameters are still missing, issue error
+    if (any(missing)) {
+      msg <- sprintf('The following parameters are missing: %s',
+                     paste(required.param[missing], collapse=', '))
+      stop(msg)
+    }
+
+    # Otherwise, returning the required parameters
+    param.list[required.param]
 }
 
 #------------------------------------------------------------------------
@@ -107,7 +99,7 @@ validate_param <- function(param.list, required.param, sublist = NULL) {
 #'
 which_approx <- function(x, y) {
   n <- length(y)
-  out <- rep(0, n)
+  out <- rep(0, n) 
 
   for (i in 1:n) {
     abs.diff <- abs(x - y[i])
@@ -126,7 +118,7 @@ which_approx_2d <- function(x1, x2, y1, y2) {
   }
 
   n <- length(y1)
-  out <- rep(0, n)
+  out <- rep(0, n) 
 
   # Picking an arbitrary x and y range
   for (i in 1:n) {

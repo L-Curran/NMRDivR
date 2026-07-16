@@ -1,0 +1,259 @@
+##TITLE= Audit trail, TopSpin 4.2.0
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= s4583990
+$$ R:/LC23PHD-A10097/NMR/Spectra Aug/s4583990/N45Y23/2/pdata/1/auditp.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2023-08-18 07:24:40.792 +1000>,<UQ\s4583990>,<CAI-NMR500>,<go4>,<TopSpin 3.6.5>,
+      <created by zg on data set with UUID 'a38d4518-3ccc-11ee-98b5-b49691cb4abd'
+       started at 2023-08-17 17:06:51.053 +1000,
+       POWCHK enabled, PULCHK disabled,
+       completed at 2023-08-18 07:24:40.790 +1000
+
+       configuration hash MD5:
+       A7 F2 E1 50 99 A4 33 43 1F A0 8B 66 5A 28 0D 0C
+       data hash MD5: 64K
+       FB D0 C1 74 C2 75 E6 43 3E E5 CF 41 39 DB 09 35>)
+(   2,<2023-11-14 11:23:20.266 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<proc1d>,<TopSpin 4.2.0>,
+      <Start of raw data processing
+       em LB = 2 SI = 128K 
+       data hash MD5: 128K
+       20 23 5D 51 A6 77 81 59 2D 45 34 94 E6 92 B1 9D>)
+(   3,<2023-11-14 11:23:20.422 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<proc1d>,<TopSpin 4.2.0>,
+      <ft FT_mod = 6 PKNL = 1 SI = 128K 
+       data hash MD5: 128K
+       FD F6 AE 9B 52 00 A0 40 F8 15 6A 2D BA 07 7C D5>)
+(   4,<2023-11-14 11:23:20.924 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<proc1d>,<TopSpin 4.2.0>,
+      <apk 
+       data hash MD5: 128K
+       07 49 B5 44 8E 0D AA 3D 24 E7 F8 C6 0C 89 5E 92>)
+(   5,<2023-11-14 11:23:21.062 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<proc1d>,<TopSpin 4.2.0>,
+      <abs n ABSG = 5 
+       data hash MD5: 128K
+       93 08 9D 0A A8 D1 12 2B 3E 61 90 76 C3 01 E6 E6>)
+(   6,<2023-11-14 11:23:46.695 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<cprserver>,<TopSpin 4.2.0>,
+      <changed parameter F1 LB to 1.50>)
+(   7,<2023-11-14 11:23:52.620 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<cprserver>,<TopSpin 4.2.0>,
+      <changed parameter F1 TDeff to 31000>)
+(   8,<2023-11-14 11:23:54.580 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<proc1d>,<TopSpin 4.2.0>,
+      <Start of raw data processing
+       efp LB = 1.5 FT_mod = 6 PKNL = 1 PHC0 = 197.7309 PHC1 = -64.47272 TDeff = 31000 SI = 128K 
+       data hash MD5: 128K
+       66 64 75 F0 C4 CF 18 EC A7 AE 5D 64 30 5A 1C 24>)
+(   9,<2023-11-14 11:25:17.066 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [17.129;16.338]
+       data hash MD5: 128K
+       66 64 75 F0 C4 CF 18 EC A7 AE 5D 64 30 5A 1C 24>)
+(  10,<2023-11-14 11:25:17.082 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [19.853;19.783]
+       data hash MD5: 128K
+       66 64 75 F0 C4 CF 18 EC A7 AE 5D 64 30 5A 1C 24>)
+(  11,<2023-11-14 11:25:17.113 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [19.853;19.783]
+       data hash MD5: 128K
+       66 64 75 F0 C4 CF 18 EC A7 AE 5D 64 30 5A 1C 24>)
+(  12,<2023-11-14 11:25:17.113 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [19.842;19.796]
+       data hash MD5: 128K
+       66 64 75 F0 C4 CF 18 EC A7 AE 5D 64 30 5A 1C 24>)
+(  13,<2023-11-14 11:25:17.144 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [6.468;2.654]
+       data hash MD5: 128K
+       66 64 75 F0 C4 CF 18 EC A7 AE 5D 64 30 5A 1C 24>)
+(  14,<2023-11-14 11:25:17.160 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-0.743;-1.307]
+       data hash MD5: 128K
+       66 64 75 F0 C4 CF 18 EC A7 AE 5D 64 30 5A 1C 24>)
+(  15,<2023-11-14 11:25:17.176 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-4.800;-5.017]
+       data hash MD5: 128K
+       66 64 75 F0 C4 CF 18 EC A7 AE 5D 64 30 5A 1C 24>)
+(  16,<2023-11-14 11:25:17.191 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-15.322;-15.361]
+       data hash MD5: 128K
+       66 64 75 F0 C4 CF 18 EC A7 AE 5D 64 30 5A 1C 24>)
+(  17,<2023-11-14 11:25:17.223 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-24.966;-25.007]
+       data hash MD5: 128K
+       66 64 75 F0 C4 CF 18 EC A7 AE 5D 64 30 5A 1C 24>)
+$$ R:/LC23PHD-A10097/NMR/Spectra Aug Good/s4583990/N45Y23/2/pdata/1/auditp.txt
+(  18,<2024-01-11 13:56:03.714 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<cprserver>,<TopSpin 4.2.0>,
+      <changed parameter F1 TDeff to 28000>)
+(  19,<2024-01-11 13:56:05.693 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<proc1d>,<TopSpin 4.2.0>,
+      <Start of raw data processing
+       efp LB = 1.5 FT_mod = 6 PKNL = 1 PHC0 = 197.7309 PHC1 = -64.47272 TDeff = 28000 SI = 128K 
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  20,<2024-01-11 13:59:33.773 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [19.842;19.796]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  21,<2024-01-11 13:59:33.788 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [17.129;16.338]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  22,<2024-01-11 13:59:33.813 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [19.832;19.796]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  23,<2024-01-11 13:59:33.882 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [17.012;16.379]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  24,<2024-01-11 13:59:33.976 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [-0.743;-1.307]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  25,<2024-01-11 13:59:33.992 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-0.303;-1.275]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  26,<2024-01-11 13:59:34.039 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [-0.303;-1.275]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  27,<2024-01-11 13:59:34.055 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-0.691;-1.307]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  28,<2024-01-11 13:59:34.070 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [-4.800;-5.017]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  29,<2024-01-11 13:59:34.086 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-4.855;-4.946]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  30,<2024-01-11 13:59:34.117 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [-15.322;-15.361]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  31,<2024-01-11 13:59:34.133 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-15.316;-15.345]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  32,<2024-01-11 13:59:34.164 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [-24.966;-25.007]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  33,<2024-01-11 13:59:34.180 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-24.976;-24.998]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  34,<2024-01-11 13:59:34.196 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [15.701;15.682]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  35,<2024-01-11 13:59:34.227 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [9.483;9.469]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  36,<2024-01-11 13:59:34.243 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [2.491;2.468]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  37,<2024-01-31 13:27:20.816 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [17.188;17.165]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  38,<2024-01-31 13:27:20.838 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [18.230;18.211]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  39,<2024-01-31 13:27:20.849 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [18.230;18.211]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  40,<2024-01-31 13:27:20.873 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [24.281;24.271]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+$$ R:/Curran_Lachlan-I3563/August Survey - Landuse/Sample Data - Abiotic/NMR - Phosphorus/Spectra Aug Good/s4583990/N45Y23/2/pdata/1/auditp.txt
+(  41,<2024-07-12 13:58:26.269 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [6.468;2.654]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  42,<2024-07-12 13:58:27.321 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [2.491;2.468]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  43,<2024-07-12 13:58:32.666 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [7.058;2.309]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  44,<2024-07-12 13:58:33.245 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-0.692;-0.715]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  45,<2024-07-12 13:58:33.747 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [-0.691;-1.307]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  46,<2024-07-12 13:58:34.267 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-0.943;-0.967]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  47,<2024-07-12 13:58:34.764 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-0.966;-0.985]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  48,<2024-07-12 13:58:35.215 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-0.985;-1.000]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  49,<2024-07-12 13:58:35.694 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-1.033;-1.043]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  50,<2024-07-12 13:58:36.276 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-1.000;-1.011]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  51,<2024-07-12 13:58:36.762 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-1.043;-1.051]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  52,<2024-07-12 13:58:37.247 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-1.069;-1.077]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  53,<2024-07-12 13:58:37.730 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-1.084;-1.091]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  54,<2024-07-12 13:58:38.218 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-1.077;-1.085]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  55,<2024-07-12 13:58:38.703 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [-15.316;-15.345]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  56,<2024-07-12 13:58:39.171 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-15.318;-15.333]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  57,<2024-07-12 13:58:39.626 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DELETE [-24.976;-24.998]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  58,<2024-07-12 13:58:40.113 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-24.982;-24.996]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  59,<2024-07-12 13:58:40.863 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-15.334;-15.345]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  60,<2024-07-12 13:58:41.681 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-0.887;-0.904]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+(  61,<2024-07-12 13:58:42.150 +1000>,<UQ\s4583990>,<SEES-39W8QN3>,<dataserver>,<TopSpin 4.2.0>,
+      <INTEGRAL DEFINE [-1.053;-1.066]
+       data hash MD5: 128K
+       CF C8 1F FC 12 26 4C EE 4F 06 0A 4A F2 A3 4F 3A>)
+##END=
+
+$$ hash MD5
+$$ D7 70 4E CF 02 A2 24 E5 3F 84 A7 3A 24 D9 F9 E8

@@ -1,0 +1,38 @@
+##TITLE= List of Points
+##JCAMPDX= 5.0
+##DATA TYPE= LINK
+##BLOCKS= 1	$$ is the number of fits or point lists
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= s4583990
+$$ 2024-01-10 14:24:40.663 +1000  UQ\s4583990@SEES-39W8QN3
+$$ R:/LC23PHD-A10097/NMR/Spectra Aug Good/s4583990/N1Y23/1/pdata/1/t1t2.dx
+##XUNITS= sec
+##YUNITS= a.u.
+##MINX=   1.000000e-02
+##MAXX=   2.000000e+01
+##MINY=  -1.000000e+00
+##MAXY=   6.124048e-01
+##TITLE= Peak No. 2 at 30.068 ppm, t1/t2, I[0] = -9.434e-01, P =  1.470e+00, T =    4.378s
+##JCAMP-DX= 5.0
+##DATA TYPE= Relaxation Data
+$$
+##$FITFKT= t1/t2( -9.433696e-01,   1.469814e+00,   4.378288e+00)
+$$
+##NPOINTS= 14
+##XYPOINTS= (XY..XY)
+  1.000000e-02,  4.269930e-01
+  3.000000e-01,  2.510440e-01
+  6.000000e-01,  4.460626e-01
+  1.000000e+00,  3.555794e-01
+  2.000000e+00, -2.335971e-01
+  4.000000e+00, -2.607473e-01
+  6.000000e+00, -5.153253e-01
+  8.000000e+00, -7.976531e-01
+  1.000000e+01, -6.888611e-01
+  1.200000e+01, -9.187324e-01
+  1.600000e+01, -1.000000e+00
+  2.000000e+01, -8.364671e-01
+  1.000000e-02,  6.124048e-01
+  3.000000e-01,  5.092608e-01
+##END= $$ End of List for Peak No. 2
+##END= $$ End of List of Points

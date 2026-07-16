@@ -1,0 +1,58 @@
+Dataset :
+ C:/data/s4583990/N7Y23/1/pdata/1
+AREA fit :
+ I[t]=I[0]+P*exp(-t/T1)
+
+14 points for Integral 1,  Integral Region from 16.808 to 16.737 ppm
+Results     Comp. 1    
+
+I[0]  =   -9.745e-001
+P     =   1.557e+000
+T1    =       1.346s
+SD    =   1.186e-002
+
+    tau    ppm     integral    intensity
+
+   10.000m    16.767  1.4713e+010     eliminated
+  300.000m    16.770  6.9957e+009  7.4276e+007
+  600.000m    16.767  5.6878e+008     eliminated
+    1.000s    16.767 -5.7778e+009     eliminated
+    2.000s    16.767 -1.6313e+010     eliminated
+    4.000s    16.767 -2.3437e+010     eliminated
+    6.000s    16.767  -2.474e+010     eliminated
+    8.000s    16.767   -2.49e+010     eliminated
+   10.000s    16.767 -2.4863e+010     eliminated
+   12.000s    16.767 -2.5777e+010     eliminated
+   16.000s    16.767 -2.4779e+010     eliminated
+   20.000s    16.767 -2.4697e+010     eliminated
+   10.000m    16.767  1.4391e+010  1.4977e+008
+  300.000m    16.767  7.3379e+009  7.7755e+007
+
+
+
+14 points for Integral 2,  Integral Region from 5.569 to 5.469 ppm
+Results     Comp. 1    
+
+I[0]  =   -9.923e-001
+P     =   1.596e+000
+T1    =       2.349s
+SD    =   3.654e-002
+
+    tau    ppm     integral    intensity
+
+   10.000m     5.494  5.0637e+009  4.3774e+007
+  300.000m     5.495  3.8147e+009     eliminated
+  600.000m     5.495  2.3342e+009     eliminated
+    1.000s     5.495  3.4019e+008     eliminated
+    2.000s     5.493 -2.4988e+009 -2.2531e+007
+    4.000s     5.495  -7.038e+009     eliminated
+    6.000s     5.495 -8.5566e+009     eliminated
+    8.000s     5.495 -8.9954e+009     eliminated
+   10.000s     5.495 -9.5032e+009     eliminated
+   12.000s     5.495 -8.6755e+009     eliminated
+   16.000s     5.495 -9.3743e+009     eliminated
+   20.000s     5.495 -9.4602e+009     eliminated
+   10.000m     5.495  5.8622e+009  4.5297e+007
+  300.000m     5.495  4.4487e+009  3.5306e+007
+
+

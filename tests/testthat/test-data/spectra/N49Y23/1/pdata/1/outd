@@ -1,0 +1,16 @@
+##TITLE= Parameter file, TopSpin 3.6.5
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 2	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= s4583990
+$$ 2023-08-26 14:10:06.210 +1000  UQ\s4583990@CAI-NMR500
+$$ C:/data/s4583990/N49Y23/1/pdata/1/outd
+$$ process C:\Bruker\TopSpin3.6.5\prog\mod\t1.exe
+##$CURPLOT= <Cups-PDF>
+##$CURPRIN= <$Cups-PDF>
+##$DFORMAT= <normdp>
+##$LAYOUT= <+/1D_BB.xwp>
+##$LFORMAT= <normlp>
+##$PFORMAT= <normpl>
+##END=

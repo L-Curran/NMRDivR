@@ -1,0 +1,58 @@
+Dataset :
+ R:/LC23PHD-A10097/NMR/Spectra Aug Good/s4583990/N1Y23/1/pdata/1
+AREA fit :
+ I[t]=I[0]+P*exp(-t/T1)
+
+14 points for Integral 1,  Integral Region from 16.914 to 16.592 ppm
+Results     Comp. 1    
+
+I[0]  =   -9.739e-01
+P     =    1.509e+00
+T1    =       1.731s
+SD    =    2.154e-02
+
+    tau    ppm     integral    intensity
+
+   10.000m    16.795   1.8742e+10     eliminated
+  300.000m    16.795   9.5582e+09     eliminated
+  600.000m    16.794   3.3175e+09    4.031e+07
+    1.000s    16.795   -4.497e+09     eliminated
+    2.000s    16.795  -1.6941e+10     eliminated
+    4.000s    16.795  -3.0085e+10     eliminated
+    6.000s    16.795  -3.1344e+10     eliminated
+    8.000s    16.795   -3.429e+10     eliminated
+   10.000s    16.795  -3.4407e+10     eliminated
+   12.000s    16.795  -3.2588e+10     eliminated
+   16.000s    16.795  -3.4739e+10     eliminated
+   20.000s    16.795  -3.5194e+10     eliminated
+   10.000m    16.793   1.8725e+10   1.6742e+08
+  300.000m    16.794    1.049e+10   9.2849e+07
+
+
+
+14 points for Integral 2,  Integral Region from 5.615 to 5.396 ppm
+Results     Comp. 1    
+
+I[0]  =   -9.434e-01
+P     =    1.470e+00
+T1    =       4.378s
+SD    =    1.152e-01
+
+    tau    ppm     integral    intensity
+
+   10.000m     5.519   2.2016e+09     eliminated
+  300.000m     5.518   1.2944e+09   1.8739e+07
+  600.000m     5.519   2.2999e+09     eliminated
+    1.000s     5.519   1.8334e+09     eliminated
+    2.000s     5.519  -1.2044e+09     eliminated
+    4.000s     5.519  -1.3444e+09     eliminated
+    6.000s     5.519  -2.6571e+09     eliminated
+    8.000s     5.519  -4.1128e+09     eliminated
+   10.000s     5.519  -3.5518e+09     eliminated
+   12.000s     5.519   -4.737e+09     eliminated
+   16.000s     5.519  -5.1561e+09     eliminated
+   20.000s     5.519  -4.3129e+09     eliminated
+   10.000m     5.520   3.1576e+09    1.999e+07
+  300.000m     5.519   2.6258e+09   1.8657e+07
+
+

@@ -1,0 +1,4 @@
+Region 1 from 16.914 to 16.592 ppm
+T1    =       1.731s
+Region 2 from 5.615 to 5.396 ppm
+T1    =       4.378s

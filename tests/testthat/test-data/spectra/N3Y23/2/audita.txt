@@ -1,0 +1,20 @@
+##TITLE= Audit trail, TopSpin 3.6.5
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= uqsshome
+$$ C:/data/uqsshome/N3Y23L/2/audita.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2023-05-11 02:11:30.026 +1000>,<UQ\uqsshome>,<CAI-NMR500>,<go4>,<TopSpin 3.6.5>,
+      <created by zg on data set with UUID 'a4b35a0c-ef03-11ed-97de-b49691cb4abd'
+       started at 2023-05-10 17:24:04.620 +1000,
+       POWCHK enabled, PULCHK disabled,
+       completed at 2023-05-11 02:11:30.022 +1000
+
+       configuration hash MD5:
+       A7 F2 E1 50 99 A4 33 43 1F A0 8B 66 5A 28 0D 0C
+       data hash MD5: 64K
+       88 75 9D 32 91 50 E5 33 54 54 2F 7A 98 E0 AE 46>)
+##END=
+
+$$ hash MD5
+$$ 75 34 08 9B C1 B8 FB 4C 5C E2 4A 2B 0E 25 CD 1E

@@ -1,10 +1,3 @@
-# -------------------------------------------------------------------------
-# Vendored from: rnmrfit (version 1.0.0)
-# Original Author/Copyright: Stanislav Sokolenk", email = stanislav@sokolenko.net, author/creator
-# License: Apache (>= 2.0)
-#
-# Description: Support functions to import and read spectra from bruker format
-
 # Functions for importing and processing jcamp data
 
 #========================================================================>
@@ -36,7 +29,7 @@
 #'         the parsed output is also processed using the process_jcamp()
 #'         function. See ?process_jcamp for more details.
 #'
-#'
+#' @export
 read_jcamp <- function(path, process.tags = TRUE,
                        process.entries = TRUE, ...) {
 
@@ -45,7 +38,7 @@ read_jcamp <- function(path, process.tags = TRUE,
 
   #------------------------------------------------------------------------
   # First, splitting by line
-  by.line <- str_split(file.string, '[ \t\r]*\n[ \t]*')[[1]]
+  by.line <- stringr::str_split(file.string, '[ \t\r]*\n[ \t]*')[[1]]
 
   # Removing lines that look like breaks or comments
   remove <- grepl('^[.*=-]{3,}', by.line)
@@ -57,10 +50,10 @@ read_jcamp <- function(path, process.tags = TRUE,
   comments <- list()
 
   # Parsing all comments that start on blank line
-  line.comments <- str_extract(by.line, '(?<=^((\\$\\$)|(##=))).*')
+  line.comments <- stringr::str_extract(by.line, '(?<=^((\\$\\$)|(##=))).*')
   line.numbers <- which(!is.na(line.comments))
 
-  comments <- as.list(str_trim(line.comments[line.numbers], 'both'))
+  comments <- as.list(stringr::str_trim(line.comments[line.numbers], 'both'))
   names(comments) <- line.numbers
 
   # Recombining lines without the comments
@@ -70,15 +63,15 @@ read_jcamp <- function(path, process.tags = TRUE,
 
   #------------------------------------------------------------------------
   # Splitting by element indicator
-  by.element <- str_split(file.string, '[\n]*##[.$]*')[[1]][-1]
+  by.element <- stringr::str_split(file.string, '[\n]*##[.$]*')[[1]][-1]
 
   # Splitting by equals sign
-  tag.matrix <- str_split_fixed(by.element, '=', n = 2)
-  tag.matrix[, 1] <- str_trim(tag.matrix[, 1], 'both')
+  tag.matrix <- stringr::str_split_fixed(by.element, '=', n = 2)
+  tag.matrix[, 1] <- stringr::str_trim(tag.matrix[, 1], 'both')
 
   # Parsing comments within lines
-  inline.comments <- str_extract_all(tag.matrix[, 2], '(?<=\\$\\$).*')
-  inline.comments <- lapply(inline.comments, str_trim, 'both')
+  inline.comments <- stringr::str_extract_all(tag.matrix[, 2], '(?<=\\$\\$).*')
+  inline.comments <- lapply(inline.comments, stringr::str_trim, 'both')
   inline.index <- sapply(inline.comments, function (x) { length(x) > 0 })
 
   new.comments <- as.list(inline.comments[inline.index])
@@ -86,8 +79,8 @@ read_jcamp <- function(path, process.tags = TRUE,
   comments <- c(comments, new.comments)
 
   # Removing comment strings from entries
-  tag.matrix[, 2] <- str_replace_all(tag.matrix[, 2], '\\$\\$.*', '')
-  tag.matrix[, 2] <- str_trim(tag.matrix[, 2], 'both')
+  tag.matrix[, 2] <- stringr::str_replace_all(tag.matrix[, 2], '\\$\\$.*', '')
+  tag.matrix[, 2] <- stringr::str_trim(tag.matrix[, 2], 'both')
 
   #------------------------------------------------------------------------
   # Looping through entries to check where header information extends,
@@ -153,14 +146,14 @@ read_jcamp <- function(path, process.tags = TRUE,
 
     # If block contains NTUPLES, they must be extracted and reformatted
     ntuples <- list()
-    if (sum(str_detect(s.tag.matrix[, 1], 'NTUPLES')) > 0) {
+    if (sum(stringr::str_detect(s.tag.matrix[, 1], 'NTUPLES')) > 0) {
 
       # First check the number of NTUPLES and END NTUPLES statements
-      logic.start <- str_detect(s.tag.matrix[, 1], '^NTUPLES')
+      logic.start <- stringr::str_detect(s.tag.matrix[, 1], '^NTUPLES')
       names.start <- s.tag.matrix[logic.start, 2]
       len.start <- sum(logic.start)
 
-      logic.end <- str_detect(s.tag.matrix[, 1], '^END NTUPLES')
+      logic.end <- stringr::str_detect(s.tag.matrix[, 1], '^END NTUPLES')
       names.end <- s.tag.matrix[logic.end, 2]
       len.end <- sum(logic.end)
 
@@ -185,7 +178,7 @@ read_jcamp <- function(path, process.tags = TRUE,
         s.tag.matrix <- s.tag.matrix[-(start:end), ]
 
         # Finding pages
-        page.index <- which(str_detect(temp.matrix[, 1], 'PAGE'))
+        page.index <- which(stringr::str_detect(temp.matrix[, 1], 'PAGE'))
         page.index <- page.index
 
         # Last page is assumed to go until end of tuples section
@@ -258,7 +251,7 @@ read_jcamp <- function(path, process.tags = TRUE,
 #' @param ... Extra arguments passed into process_jcamp_tag().
 #
 #' @return ...
-#'
+#' @export
 process_jcamp <- function(jcamp_list, tags = TRUE, entries = TRUE, ...) {
 
   # Basic input check
@@ -283,7 +276,7 @@ process_jcamp <- function(jcamp_list, tags = TRUE, entries = TRUE, ...) {
       # Processing all items other than ntuples directly
       logic <-  names(out[['blocks']][[i]]) != 'NTUPLES'
       out[['blocks']][[i]][logic] <- lapply(out[['blocks']][[i]][logic],
-                                            process_jcamp_entry)
+                                       process_jcamp_entry)
 
       # If there are no ntuples then skip the rest of the iteration
       if (!'NTUPLES' %in% names(out[['blocks']][[i]])) next
@@ -373,27 +366,27 @@ process_jcamp <- function(jcamp_list, tags = TRUE, entries = TRUE, ...) {
 
         out[['blocks']][[i]][['NTUPLES']][[j]] <- with(out[['blocks']][[i]], {
 
-          # Modifying dataframe names
-          NTUPLES[[j]][['DESCRIPTORS']] <- with(NTUPLES[[j]], {
-            colnames(DESCRIPTORS) <- sapply(colnames(DESCRIPTORS),
-                                            process_jcamp_tag, ...)
-            rownames(DESCRIPTORS) <- sapply(rownames(DESCRIPTORS),
-                                            process_jcamp_tag, ...)
-            DESCRIPTORS
+        # Modifying dataframe names
+        NTUPLES[[j]][['DESCRIPTORS']] <- with(NTUPLES[[j]], {
+          colnames(DESCRIPTORS) <- sapply(colnames(DESCRIPTORS),
+                                          process_jcamp_tag, ...)
+          rownames(DESCRIPTORS) <- sapply(rownames(DESCRIPTORS),
+                                          process_jcamp_tag, ...)
+          DESCRIPTORS
+        })
+
+        # Looping through the PAGES
+        for (k in 1:length(NTUPLES[[j]][['PAGES']])) {
+          NTUPLES[[j]][['PAGES']][[k]] <- with(NTUPLES[[j]], {
+            colnames(PAGES[[k]]) <- sapply(colnames(PAGES[[k]]),
+                                           process_jcamp_tag, ...)
+            PAGES[[k]]
           })
+        }
 
-          # Looping through the PAGES
-          for (k in 1:length(NTUPLES[[j]][['PAGES']])) {
-            NTUPLES[[j]][['PAGES']][[k]] <- with(NTUPLES[[j]], {
-              colnames(PAGES[[k]]) <- sapply(colnames(PAGES[[k]]),
-                                             process_jcamp_tag, ...)
-              PAGES[[k]]
-            })
-          }
-
-          names(NTUPLES[[j]]) <- sapply(names(NTUPLES[[j]]),
-                                        process_jcamp_tag, ...)
-          NTUPLES[[j]]
+        names(NTUPLES[[j]]) <- sapply(names(NTUPLES[[j]]),
+                                      process_jcamp_tag, ...)
+        NTUPLES[[j]]
         })
       }
 
@@ -424,10 +417,10 @@ process_jcamp <- function(jcamp_list, tags = TRUE, entries = TRUE, ...) {
 #'
 #' @return Character string, numeric vector, or data.frame depending on
 #'         the form of the entry
-#'
+#' @export
 process_jcamp_entry <- function(jcamp.entry, sep = NULL) {
 
-  by.line <- str_split(jcamp.entry, '[\r\n]+')[[1]]
+  by.line <- stringr::str_split(jcamp.entry, '[\r\n]+')[[1]]
 
   # Processing for single line items
   if (length(by.line) == 1) {
@@ -435,13 +428,13 @@ process_jcamp_entry <- function(jcamp.entry, sep = NULL) {
     # If there is a descriptor tag of the form (0..10), the entry is
     # a vector
     d.vector <- '^[ \t]*\\(\\d+\\.\\.\\d+\\)'
-    if (str_detect(by.line[1], d.vector)) {
-      descriptor <- str_extract(by.line[1], d.vector)
-      extent <- str_extract(descriptor, c('(?<=\\()\\d+', '\\d+(?=\\))'))
+    if (stringr::str_detect(by.line[1], d.vector)) {
+      descriptor <- stringr::str_extract(by.line[1], d.vector)
+      extent <- stringr::str_extract(descriptor, c('(?<=\\()\\d+', '\\d+(?=\\))'))
       extent <- as.numeric(extent)
 
-      content <- str_replace(by.line[1], d.vector, '')
-      formatted <- as.numeric(str_split(content, '[ ,\n]+')[[1]])
+      content <- stringr::str_replace(by.line[1], d.vector, '')
+      formatted <- as.numeric(stringr::str_split(content, '[ ,\n]+')[[1]])
 
       if (length(formatted) != (extent[2] - extent[1] + 1)) {
         msg <- sprintf('Unexpected vector length processing: \n%s', jcamp.entry)
@@ -449,13 +442,13 @@ process_jcamp_entry <- function(jcamp.entry, sep = NULL) {
       }
     }
     # If surrounded by '<>', character, character
-    else if (str_detect(jcamp.entry, '<.*>')) {
-      formatted <- as.character(str_replace(jcamp.entry, '<(.*)>', '\\1'))
+    else if (stringr::str_detect(jcamp.entry, '<.*>')) {
+      formatted <- as.character(stringr::str_replace(jcamp.entry, '<(.*)>', '\\1'))
       return(formatted)
     }
     # Otherwise, attempt spitting is a separator is provided
     else if (!is.null(sep)) {
-      formatted <- str_split(jcamp.entry, sep)[[1]]
+      formatted <- stringr::str_split(jcamp.entry, sep)[[1]]
     }
     else {
       formatted <- jcamp.entry
@@ -474,13 +467,13 @@ process_jcamp_entry <- function(jcamp.entry, sep = NULL) {
     d.pairs <- '\\(\\w{2}\\.\\.\\w{2}\\)'
     d.spectrum <- '\\(X\\+\\+\\(\\w\\.\\.\\w\\)\\)'
 
-    if (str_detect(by.line[1], d.vector)) {
-      descriptor <- str_extract(by.line[1], d.vector)
-      extent <- str_extract(descriptor, c('(?<=\\()\\d+', '\\d+(?=\\))'))
+    if (stringr::str_detect(by.line[1], d.vector)) {
+      descriptor <- stringr::str_extract(by.line[1], d.vector)
+      extent <- stringr::str_extract(descriptor, c('(?<=\\()\\d+', '\\d+(?=\\))'))
       extent <- as.numeric(extent)
 
       content <- paste(by.line[2:length(by.line)], collapse = '\n')
-      formatted <- str_split(content, '[ \n]+')[[1]]
+      formatted <- stringr::str_split(content, '[ \n]+')[[1]]
 
       # Checking to see if it's a vector of strings
       n.strings <- sum(grepl('<.*>', formatted))
@@ -501,18 +494,18 @@ process_jcamp_entry <- function(jcamp.entry, sep = NULL) {
         stop(msg)
       }
     }
-    else if (str_detect(by.line[1], d.pairs)) {
+    else if (stringr::str_detect(by.line[1], d.pairs)) {
       # Picking off xy names
-      descriptor <- str_extract(by.line[1], d.pairs)
-      xy.names <- str_extract(descriptor, c('(?<=\\()\\w', '(?<=\\(\\w)\\w'))
+      descriptor <- stringr::str_extract(by.line[1], d.pairs)
+      xy.names <- stringr::str_extract(descriptor, c('(?<=\\()\\w', '(?<=\\(\\w)\\w'))
 
       content <- paste(by.line[2:length(by.line)], collapse = '\n')
 
       # Splitting multiple pairs into single pairs
-      xy.pairs <- str_trim(str_split(content, '[;\r\n]+')[[1]], 'both')
+      xy.pairs <- stringr::str_trim(stringr::str_split(content, '[;\r\n]+')[[1]], 'both')
 
       # Spliting single pairs into values
-      values <- str_split_fixed(xy.pairs, '[ ,]+', n = 2)
+      values <- stringr::str_split_fixed(xy.pairs, '[ ,]+', n = 2)
 
       # Converting to numeric and labelling columns
       mode(values) <- 'numeric'
@@ -520,27 +513,27 @@ process_jcamp_entry <- function(jcamp.entry, sep = NULL) {
 
       formatted <- values
     }
-    else if (str_detect(by.line[1], d.spectrum)) {
+    else if (stringr::str_detect(by.line[1], d.spectrum)) {
       # Picking off xy names
-      descriptor <- str_extract(by.line[1], d.spectrum)
-      x.name <- str_extract(descriptor, '(?<=\\()\\w(?=\\+\\+)')
-      y.name <- str_extract(descriptor, '(?<=\\(\\w\\+\\+\\()\\w')
+      descriptor <- stringr::str_extract(by.line[1], d.spectrum)
+      x.name <- stringr::str_extract(descriptor, '(?<=\\()\\w(?=\\+\\+)')
+      y.name <- stringr::str_extract(descriptor, '(?<=\\(\\w\\+\\+\\()\\w')
 
       # Dropping format string
       by.line <- by.line[-1]
 
       # First, convert all spaces to a single character width
-      by.line <- str_replace_all(by.line, '\\s+', ' ')
+      by.line <- stringr::str_replace_all(by.line, '\\s+', ' ')
 
-      # Then substitute a space before all leading characters
-      by.line <- str_replace_all(by.line, '(?<![ ])([a-zA-Z@%+-])', ' \\1')
+	    # Then substitute a space before all leading characters
+      by.line <- stringr::str_replace_all(by.line, '(?<![ ])([a-zA-Z@%+-])', ' \\1')
 
       # Check compression mode
-      if ( any(str_detect(by.line, '[sS-Z]')) ) {
+      if ( any(stringr::str_detect(by.line, '[sS-Z]')) ) {
         mode <- 3 # DUP
-      } else if ( any(str_detect(by.line, '[j-rJ-R%]')) ) {
+      } else if ( any(stringr::str_detect(by.line, '[j-rJ-R%]')) ) {
         mode <- 2 # DIF
-      } else if ( any(str_detect(by.line, '[a-iA-I@]')) ) {
+      } else if ( any(stringr::str_detect(by.line, '[a-iA-I@]')) ) {
         mode <- 1 # SQZ
       } else {
         mode <- 0
@@ -549,98 +542,98 @@ process_jcamp_entry <- function(jcamp.entry, sep = NULL) {
       # If the data has encoded repeats, expand them
       if ( mode == 3 ) {
 
-        # Pick off repeated elements
+	      # Pick off repeated elements
         pattern <- '[0-9a-zA-Z@%+-]+ [sS-Z][0-9]*'
         repeats <- unique(unlist(str_match_all(by.line, pattern)))
 
-        # Translate repeats
-        patterns <- c('S'='1', 'T'='2', 'U'='3', 'V'='4', 'W'='5',
+		    # Translate repeats
+	      patterns <- c('S'='1', 'T'='2', 'U'='3', 'V'='4', 'W'='5',
                       'X'='6', 'Y'='7', 'Z'='8', 's'='9')
-        replacements <- str_replace_all(repeats, patterns)
+        replacements <- stringr::str_replace_all(repeats, patterns)
 
-        # Split repeat pairs and apply the repeat
-        replacements <- str_split(replacements, ' ')
+	      # Split repeat pairs and apply the repeat
+		    replacements <- stringr::str_split(replacements, ' ')
         f <- function(x) paste(rep(x[1], as.numeric(x[2])), collapse = ' ')
-        replacements <- unlist(lapply(replacements, f))
+		    replacements <- unlist(lapply(replacements, f))
 
-        # Finally, re-insert the repeated values
-        names(replacements) <- repeats
-        by.line <- str_replace_all(by.line, replacements)
-      }
+		    # Finally, re-insert the repeated values
+	      names(replacements) <- repeats
+	      by.line <- stringr::str_replace_all(by.line, replacements)
+	    }
 
-      # Convert squeezed characters
-      if ( mode >= 1) {
+	  # Convert squeezed characters
+	  if ( mode >= 1) {
 
-        # Translate characters
-        patterns <- c('A'='1', 'B'='2', 'C'='3', 'D'='4', 'E'='5',
-                      'F'='6', 'G'='7', 'H'='8', 'I'='9',
-                      'a'='-1', 'b'='-2', 'c'='-3', 'd'='-4', 'e'='-5',
-                      'f'='-6', 'g'='-7', 'h'='-8', 'i'='-9', '@'=0)
+	    # Translate characters
+	    patterns <- c('A'='1', 'B'='2', 'C'='3', 'D'='4', 'E'='5',
+                    'F'='6', 'G'='7', 'H'='8', 'I'='9',
+					          'a'='-1', 'b'='-2', 'c'='-3', 'd'='-4', 'e'='-5',
+                    'f'='-6', 'g'='-7', 'h'='-8', 'i'='-9', '@'=0)
 
-        by.line <- str_replace_all(by.line, patterns)
-      }
+		  by.line <- stringr::str_replace_all(by.line, patterns)
+	  }
 
-      # At this point, split by spaces
-      by.line <- lapply(by.line, str_trim)
-      by.line <- str_split(by.line, ' ')
+	  # At this point, split by spaces
+    by.line <- lapply(by.line, stringr::str_trim)
+    by.line <- stringr::str_split(by.line, ' ')
 
-      # If the data is stored as differences, apply them now
-      if ( mode >= 2 ) {
+	  # If the data is stored as differences, apply them now
+	  if ( mode >= 2 ) {
 
-        # Translate characters
-        patterns <- c('J'='1', 'K'='2', 'L'='3', 'M'='4', 'N'='5',
-                      'O'='6', 'P'='7', 'Q'='8', 'R'='9',
-                      'j'='-1', 'k'='-2', 'l'='-3', 'm'='-4',
-                      'n'='-5', 'o'='-6', 'p'='-7', 'q'='-8', 'r'='-9', '%'=0)
+	    # Translate characters
+	    patterns <- c('J'='1', 'K'='2', 'L'='3', 'M'='4', 'N'='5',
+                    'O'='6', 'P'='7', 'Q'='8', 'R'='9',
+					          'j'='-1', 'k'='-2', 'l'='-3', 'm'='-4',
+                    'n'='-5', 'o'='-6', 'p'='-7', 'q'='-8', 'r'='-9', '%'=0)
 
-        # Double check to make sure there are no non-differences present
-        f <- function(x) all(str_detect(x[-(1:2)], '[j-rJ-R%]'))
-        all.differences <- lapply(by.line, f)
-        msg <- 'Absolute values found among DIF compressed data, aborting.'
-        if ( any(! unlist(all.differences)) ) stop(msg)
+		  # Double check to make sure there are no non-differences present
+      f <- function(x) all(stringr::str_detect(x[-(1:2)], '[j-rJ-R%]'))
+		  all.differences <- lapply(by.line, f)
+		  msg <- 'Absolute values found among DIF compressed data, aborting.'
+	    if ( any(! unlist(all.differences)) ) stop(msg)
 
-        by.line <- lapply(by.line, str_replace_all, patterns)
+		  by.line <- lapply(by.line, stringr::str_replace_all, patterns)
 
-        # Convert to numerical format and apply cumulative sum
-        f <- function(x) c(as.numeric(x[1]), cumsum(as.numeric(x)[-1]))
-        by.line <- lapply(by.line, f)
+		  # Convert to numerical format and apply cumulative sum
+      f <- function(x) c(as.numeric(x[1]), cumsum(as.numeric(x)[-1]))
+		  by.line <- lapply(by.line, f)
 
-        # With the difference comparison mode, the last value of each line
-        # should match the second value of following line
-        last.values <- unlist(lapply(by.line, function(x) `[`(x, length(x))))
-        second.values <- unlist(lapply(by.line, function(x) `[`(x, 2)))
+		  # With the difference comparison mode, the last value of each line
+      # should match the second value of following line
+		  last.values <- unlist(lapply(by.line, function(x) `[`(x, length(x))))
+		  second.values <- unlist(lapply(by.line, function(x) `[`(x, 2)))
 
-        n <- length(by.line)
-        msg <- 'y value data check failed in decompressing DIF data, aborting.'
-        differences <- abs(last.values[1:(n-1)] - second.values[2:n])
-        if ( any(differences > 1e-6) ) stop(msg)
+		  n <- length(by.line)
+	 	  msg <- 'y value data check failed in decompressing DIF data, aborting.'
+      differences <- abs(last.values[1:(n-1)] - second.values[2:n])
+		  if ( any(differences > 1e-6) ) stop(msg)
 
-        # Stripping these last values
-        by.line[-n] <- lapply(by.line[-n], function(x) x[-length(x)])
+		  # Stripping these last values
+		  by.line[-n] <- lapply(by.line[-n], function(x) x[-length(x)])
 
-      } else {
-        # Otherwise, just convert to numeric
-        by.line <- lapply(by.line, as.numeric)
-      }
+	  } else {
+		  # Otherwise, just convert to numeric
+		  by.line <- lapply(by.line, as.numeric)
+	  }
 
-      # Picking off the x values
-      x.values <- unlist(lapply(by.line, `[`, 1))
+	  # Picking off the x values
+	  x.values <- unlist(lapply(by.line, `[`, 1))
 
-      # Counting observations per line
-      counts <- unlist(lapply(by.line, function(x) length(x) - 1))
+	  # Counting observations per line
+	  counts <- unlist(lapply(by.line, function(x) length(x) - 1))
 
-      # Ensuring that delta x remains consistent throughout
-      n <- length(by.line)
-      delta.x <- (x.values[2:n] - x.values[1:(n-1)])/counts[1:(n-1)]
+	  # Ensuring that delta x remains consistent throughout
+	  n <- length(by.line)
+	  delta.x <- (x.values[2:n] - x.values[1:(n-1)])/counts[1:(n-1)]
 
-      msg <- 'x value data check failed in data import, aborting.'
-      if ( diff(range(delta.x))/mean(delta.x) > 1e-3 ) stop(msg)
+	  msg <- 'x value data check failed in data import, aborting.'
+	  if ( diff(range(delta.x))/mean(delta.x) > 1e-3 ) stop(msg)
 
-      delta.x <- median(delta.x)
+	  delta.x <- median(delta.x)
 
-      n.out <- sum(counts)
-      x.out <- seq(x.values[1], by = delta.x, length.out = n.out)
-      y.out <- unlist(lapply(by.line, `[`, -1))
+	  n.out <- sum(counts)
+	  x.out <- seq(x.values[1], by = delta.x, length.out = n.out)
+	  y.out <- unlist(lapply(by.line, `[`, -1))
 
       formatted <- data.frame(x.out, y.out)
       colnames(formatted) <- c(x.name, y.name)
@@ -675,7 +668,7 @@ process_jcamp_entry <- function(jcamp.entry, sep = NULL) {
 #'
 #' @return A renamed character string.
 #'
-#'
+#' @export
 process_jcamp_tag <- function(jcamp.tag, f_case = tolower,
                               tag.space = '.', tag.map = NA) {
 
@@ -683,7 +676,7 @@ process_jcamp_tag <- function(jcamp.tag, f_case = tolower,
   jcamp.tag <- f_case(jcamp.tag)
 
   # Replacing spaces
-  jcamp.tag <- str_replace_all(jcamp.tag, '[ \t_]+', tag.space)
+  jcamp.tag <- stringr::str_replace_all(jcamp.tag, '[ \t_]+', tag.space)
 
   # Specifying default tag.map
   default.map <- c('rev'='reverse')
@@ -713,7 +706,7 @@ process_jcamp_tag <- function(jcamp.tag, f_case = tolower,
 #'
 #' @return A flattened list containing all jcamp entries.
 #'
-#'
+#' @export
 flatten_jcamp <- function(jcamp_list) {
 
   # Initializing output

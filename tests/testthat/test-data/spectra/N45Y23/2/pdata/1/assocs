@@ -1,0 +1,11 @@
+##TITLE= Parameter file, TopSpin 4.2.0
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 1	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= uqtmcla2
+$$ 2024-03-18 09:39:04.718 +1000  uqtmcla2@safs-r0yhmd6
+$$ /Volumes/Curran_Lachlan-I3563/NMR/Spectra Aug Good/s4583990/N45Y23/2/pdata/1/assocs
+$$ process /opt/topspin4.2.0/prog/mod/dataserver
+##$MULTDISP= </Volumes/Curran_Lachlan-I3563/NMR/Spectra Aug Good/s4583990/N23Y23/2/pdata/1>
+##END=
