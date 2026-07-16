@@ -28,6 +28,11 @@ warp_me <- function(
 
   ppm_grid <- colnames(spectra_matrix_raw)
 
+
+  #=========================================================
+  # PERFORM WARPING
+  #=========================================================
+
   warp_output <- do.call(
     PepsNMR::Warping,
     c(
@@ -41,70 +46,202 @@ warp_me <- function(
     )
   )
 
-  spectra_warped <- if (is.list(warp_output) && !is.null(warp_output$Spectrum_data)) {
+
+  spectra_warped <- if (
+    is.list(warp_output) &&
+    !is.null(warp_output$Spectrum_data)
+  ) {
+
     warp_output$Spectrum_data
+
   } else {
+
     warp_output
+
   }
 
-  bc_raw <- vegan::vegdist(spectra_matrix_raw, method = "bray")
-  bc_warped <- vegan::vegdist(spectra_warped, method = "bray")
 
-  pcoa_raw <- stats::cmdscale(bc_raw, k = 2)
-  pcoa_warped <- stats::cmdscale(bc_warped, k = 2)
+  #=========================================================
+  # BRAY-CURTIS DISTANCES
+  #=========================================================
 
-  proc <- vegan::procrustes(pcoa_raw, pcoa_warped, symmetric = TRUE)
-  proc_test <- vegan::protest(pcoa_raw, pcoa_warped, permutations = nperm)
+  bc_raw <- suppressWarnings(vegan::vegdist(
+    spectra_matrix_raw,
+    method = "bray"
+  ))
+
+  bc_warped <- suppressWarnings(vegan::vegdist(
+    spectra_warped,
+    method = "bray"
+  ))
+
+
+  #=========================================================
+  # PCoA ORDINATION
+  #=========================================================
+
+  pcoa_raw <- stats::cmdscale(
+    bc_raw,
+    k = 2
+  )
+
+  pcoa_warped <- stats::cmdscale(
+    bc_warped,
+    k = 2
+  )
+
+
+  #=========================================================
+  # PROCRUSTES TEST
+  #=========================================================
+
+  proc <- vegan::procrustes(
+    pcoa_raw,
+    pcoa_warped,
+    symmetric = TRUE
+  )
+
+  proc_test <- vegan::protest(
+    pcoa_raw,
+    pcoa_warped,
+    permutations = nperm
+  )
+
+
+  #=========================================================
+  # PREPARE PLOT DATA
+  #=========================================================
 
   df_proc <- data.frame(
-    Raw_X = proc$X[, 1],
-    Raw_Y = proc$X[, 2],
-    Warped_X = proc$Yrot[, 1],
-    Warped_Y = proc$Yrot[, 2]
+    Raw_X = proc$X[,1],
+    Raw_Y = proc$X[,2],
+
+    warped_X = proc$Yrot[,1],
+    warped_Y = proc$Yrot[,2],
+
+    Spectrum = rownames(proc$X)
   )
+
 
   df_long <- tidyr::pivot_longer(
     df_proc,
-    cols = everything(),
-    names_to = c("Dataset", ".value"),
-    names_pattern = "(Raw|Warped)_(X|Y)"
+    cols = c(
+      Raw_X,
+      Raw_Y,
+      warped_X,
+      warped_Y
+    ),
+    names_to = c(
+      "Dataset",
+      ".value"
+    ),
+    names_pattern = "(Raw|warped)_(X|Y)"
   )
 
-  pal <- c("#0072B2", "#D55E00")
 
-  p <- ggplot2::ggplot(df_long, ggplot2::aes(X, Y, color = Dataset)) +
-    ggplot2::geom_point(size = 3) +
+  #=========================================================
+  # PROCRUSTES PLOT
+  #=========================================================
+
+  p <- ggplot2::ggplot(
+    df_long,
+    ggplot2::aes(
+      x = X,
+      y = Y,
+      colour = Dataset
+    )
+  ) +
+
+    ggplot2::stat_ellipse(
+      ggplot2::aes(
+        group = Dataset,
+        fill = Dataset
+      ),
+      geom = "polygon",
+      alpha = 0.05
+    ) +
+
+    ggplot2::geom_point(
+      size = 3
+    ) +
+
     ggplot2::geom_segment(
       data = df_proc,
-      ggplot2::aes(x = Raw_X, y = Raw_Y, xend = Warped_X, yend = Warped_Y),
+
+      ggplot2::aes(
+        x = Raw_X,
+        y = Raw_Y,
+        xend = warped_X,
+        yend = warped_Y
+      ),
+
       inherit.aes = FALSE,
-      colour = "grey60",
+
+      colour = "grey50",
       linetype = "dashed"
     ) +
-    ggplot2::scale_color_manual(values = pal) +
-    ggplot2::theme_minimal(base_size = 14) +
+
+    ggplot2::scale_colour_manual(
+      values = c(
+        Raw = "#0072B2",
+        warped = "#D55E00"
+      )
+    ) +
+
+    ggplot2::scale_fill_manual(
+      values = c(
+        Raw = "#0072B2",
+        warped = "#D55E00"
+      )
+    ) +
+
+    ggplot2::theme_minimal(
+      base_size = 14
+    ) +
+
+    ggplot2::theme(
+      legend.position = "top",
+      axis.title = ggplot2::element_blank()
+    ) +
+
     ggplot2::labs(
-      title = "Procrustes Analysis: Raw vs Warped Spectra",
+      title = "Procrustes Analysis: Raw vs warped Spectra",
       subtitle = paste0(
-        "R2 = ", round(proc_test$t0, 3),
-        ", p = ", signif(proc_test$signif, 3)
+        "R² = ",
+        round(proc_test$t0,3),
+        ", p = ",
+        signif(proc_test$signif,3)
       )
     )
 
+
+  #=========================================================
+  # RETURN
+  #=========================================================
+
   structure(
     list(
+
       SpectraRaw = spectra_matrix_raw,
+
       SpectraWarped = spectra_warped,
+
       ppm_grid = ppm_grid,
+
       Warping = warp_output,
+
       Procrustes = proc,
+
       ProcrustesTest = proc_test,
+
       ProcrustesPlot = p
+
     ),
+
     class = "spectra_warped"
   )
-}
 
+}
 
 #' Standardise warped spectra using chemical shift calibration
 #'
@@ -154,8 +291,8 @@ standardise_warped_spectra <- function(
   colnames(corrected_spectra) <- ppm
   rownames(corrected_spectra) <- rownames(spectra_warped)
 
-  warped_dist <- vegan::vegdist(spectra_warped, "bray")
-  std_dist <- vegan::vegdist(corrected_spectra, "bray")
+  warped_dist <- suppressWarnings(vegan::vegdist(spectra_warped, "bray"))
+  std_dist <- suppressWarnings(vegan::vegdist(corrected_spectra, "bray"))
 
   summary_stats <- data.frame(
     Dataset = c("Warped", "Standardised"),

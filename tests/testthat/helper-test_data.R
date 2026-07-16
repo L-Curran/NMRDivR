@@ -1,4 +1,6 @@
-load_test_spectra_matrix <- function(max_points = 5000) {
+# tests/testthat/helper-test_data.R
+
+load_test_spectra_matrix <- function(n = 6) {
 
   data_file <- testthat::test_path(
     "test-data",
@@ -7,49 +9,43 @@ load_test_spectra_matrix <- function(max_points = 5000) {
 
   load(data_file)
 
-  # object stored in RData is called spectra
+  # object saved as "spectra"
   NMRData1D_list <- spectra
 
 
-  intensity <- lapply(
-    NMRData1D_list,
-    function(x) {
+  # subset spectra
+  NMRData1D_list <- NMRData1D_list[seq_len(min(n,length(NMRData1D_list)))]
 
-      Re(x@processed$intensity)
+
+  ppm <- purrr::map_dbl(
+    NMRData1D_list[[1]]@processed$direct.shift,
+    identity
+  )
+
+
+  intensity <- purrr::map_dfc(
+    NMRData1D_list,
+    function(x){
+
+      Re(
+        x@processed$intensity
+      )
 
     }
   )
 
 
-  ppm <- NMRData1D_list[[1]]@processed$direct.shift
+  intensity <- as.matrix(intensity)
 
+  intensity <- t(intensity)
 
-  mat <- do.call(
-    rbind,
-    intensity
+  colnames(intensity) <- ppm
+
+  rownames(intensity) <- paste0(
+    "sample_",
+    seq_len(nrow(intensity))
   )
 
 
-  rownames(mat) <- names(NMRData1D_list)
-
-
-  colnames(mat) <- ppm
-
-
-  # reduce size for tests
-  if(ncol(mat) > max_points){
-
-    keep <- seq(
-      1,
-      ncol(mat),
-      length.out = max_points
-    )
-
-    mat <- mat[, keep, drop = FALSE]
-
-  }
-
-
-  mat
-
+  intensity
 }

@@ -17,6 +17,7 @@ Imports:
     ggplot2,
     PepsNMR,
     plotly,
+    praise,
     purrr,
     stringr,
     vegan
