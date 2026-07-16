@@ -36,7 +36,7 @@ load_NMRData1D <- function(spectra.folder,
     if (!base::dir.exists(spectra_path)) {
       base::message("Missing: ", sample, " -> ", spectra_path)
       skipped <- c(skipped, sample)
-      spectra_list[[sample]] <- NULL   # IMPORTANT: keep slot
+      spectra_list[sample] <- list(NULL)   # IMPORTANT: keep slot
       next
     }
 
@@ -61,10 +61,15 @@ load_NMRData1D <- function(spectra.folder,
     }
 
     # CRITICAL SAFETY CHECK:
-    # ensure we only store valid list-like outputs
-    if (!is.list(obj)) {
-      base::stop("nmrdata_1d() did not return a list for sample: ", sample)
+    # Validate returned object
+    if (!inherits(obj, "NMRData1D")) {
+      base::stop(
+        "nmrdata_1d() did not return an NMRData1D object for sample: ",
+        sample
+      )
     }
+
+    spectra_list[[sample]] <- obj
 
     spectra_list[[sample]] <- obj
   }
@@ -126,4 +131,45 @@ sample_sanity <- function(spectra.matrix,
     spectra.matrix = spectra.matrix,
     spectra.meta = spectra.meta
   )
+}
+
+
+#' Convert spectra into simplified sample x ppm format
+#'
+#'
+#' @param NMRData1D_list A list of NMRData1D objects
+#' @param sample.names Character vectors of samples to extract from NMRData1D_list
+#'
+#' @return A matrix in n x p format, where each row corresponds to a unique spectrum,
+#' columns correpsond to chemical shift and cell values correspond to intesnity
+#' @export
+extract_spectra_matrix <- function(NMRData1D_list, samples) {
+  # Extract the direct.shift values to check for consistency
+  direct_shifts <- purrr::map(NMRData1D_list, ~ .x@processed$direct.shift)
+
+  # Ensure that all direct.shift values are consistent
+  if (!all(purrr::map_lgl(direct_shifts, ~ identical(.x, direct_shifts[[1]])))) {
+    stop("direct.shift values are not the same for all NMR objects.")
+  }
+
+  # Extract intensity values and build the spectra matrix
+  spectra_list <- purrr::map2(NMRData1D_list, samples, ~ {
+    # Extract the processed data frame from the object
+    processed_data <- .x@processed
+
+    # Extract the real part of intensity values
+    intensity <- Re(processed_data$intensity)
+
+    # Assign the sample name as the name of the vector
+    stats::setNames(intensity, .y)
+  })
+
+  # Convert the list into a matrix
+  spectra_matrix <- do.call(rbind, spectra_list)
+
+  # Assign row names (spectrum IDs) and column names (direct.shift values)
+  rownames(spectra_matrix) <- names(spectra_list)
+  colnames(spectra_matrix) <- direct_shifts[[1]]
+
+  return(spectra_matrix)
 }

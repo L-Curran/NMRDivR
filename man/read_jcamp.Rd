@@ -18,14 +18,14 @@ TRUE to attempt some basic conversion.}
 \item{...}{Arguments passed into process_jcamp().}
 }
 \value{
-A list with the following entries: 'header', 'blocks',  
+A list with the following entries: 'header', 'blocks',
         and 'comments'. Header elements are all those contained between
         the 'TITLE', 'OWNER', and 'ORIGIN', and may vary between files.
         All bon-header entries (including notes) are stored
         in the 'blocks' sublist. If no block information is specified,
-        all information is stored in block 1. comments' contains a list of 
-        comment blocks indexed by corresponding JCAMP element of the line 
-        number on which they were found (if there is no corresponding 
+        all information is stored in block 1. comments' contains a list of
+        comment blocks indexed by corresponding JCAMP element of the line
+        number on which they were found (if there is no corresponding
         element). If either convert.tags or contvert.entries is true,
         the parsed output is also processed using the process_jcamp()
         function. See ?process_jcamp for more details.

@@ -80,8 +80,8 @@ remove_artefacts <- function(spectra.matrix.raw,
   #=========================================================
   # DISTANCES (BRAY-CURTIS)
   #=========================================================
-  bc_raw <- vegan::vegdist(spectra.matrix.raw, method = "bray")
-  bc_corr <- vegan::vegdist(spectra_corrected, method = "bray")
+  bc_raw <- suppressWarnings(vegan::vegdist(spectra.matrix.raw, method = "bray"))
+  bc_corr <- suppressWarnings(vegan::vegdist(spectra_corrected, method = "bray"))
 
   #=========================================================
   # PCoA (cmdscale)

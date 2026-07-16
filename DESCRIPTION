@@ -13,4 +13,10 @@ URL: https://github.com/L-Curran/NMRDivR
 BugReports: https://github.com/L-Curran/NMRDivR/issues
 RoxygenNote: 7.3.3
 Imports: 
-    stringr
+    dplyr,
+    ggplot2,
+    PepsNMR,
+    plotly,
+    purrr,
+    stringr,
+    vegan

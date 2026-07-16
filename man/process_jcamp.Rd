@@ -9,7 +9,7 @@ process_jcamp(jcamp_list, tags = TRUE, entries = TRUE, ...)
 \arguments{
 \item{jcamp_list}{The output of read_jcamp().}
 
-\item{tags}{TRUE to convert entry tags. All tags are converted to 
+\item{tags}{TRUE to convert entry tags. All tags are converted to
 lowercase with dots replacing spaces. Some tags known to
 take multiple forms ('JCAMPDX' vs. 'JCAMP-DX') are converted
 to a single fixed form (full list to come).}
@@ -25,6 +25,6 @@ Lists and tables are converted to matrices if possible.}
 ...
 }
 \description{
-Converts string key-value pairs from parsed JCAMP file into numeric and 
+Converts string key-value pairs from parsed JCAMP file into numeric and
 matrix formats where applicable.
 }

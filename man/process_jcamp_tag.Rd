@@ -16,7 +16,7 @@ tolower().}
 \item{tag.space}{A string used to replace empty spaces and underscores.}
 
 \item{tag.map}{A vector of strings corresponding to new tags,
-where the vector names correspond to the tags that will 
+where the vector names correspond to the tags that will
 be renamed. NULL avoids map conversions while NA uses
 the default conversions below:}
 }
